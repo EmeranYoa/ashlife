@@ -1,0 +1,18 @@
+{
+  "resourceName": "ashlifeStorage",
+  "policyUUID": "8630b81c",
+  "bucketName": "ashlife66e9be3fe921440baf6f8fc9e9d181f9",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "431c6bfa-c0b6-4b46-ad5d-8902f256aee5",
+    "name": "TRIAL",
+    "limit": 5,
+    "size": 3,
+    "price": 0,
+    "currency": "XAF",
+    "duration": 15,
+    "nbTraining": 1
+  },
+  {
+    "id": "431c6bfa-c0b6-4b46-ad5d-8902f256aez5",
+    "name": "BASIC",
+    "limit": 25,
+    "size": 5,
+    "price": 1000,
+    "currency": "XAF",
+    "duration": 30,
+    "nbTraining": 1
+  },
+  {
+    "id": "431c6bfa-c0b6-4b46-ad5d-8902f256fee5",
+    "name": "PREMIUM",
+    "limit": 150,
+    "size": 10,
+    "price": 5000,
+    "currency": "XAF",
+    "duration": 90,
+    "nbTraining": 2
+  },
+  {
+    "id": "431c6bfa-c0b6-4b46-ad5d-8902f256dfe5",
+    "name": "GOLD",
+    "limit": 900,
+    "size": 20,
+    "price": 10000,
+    "currency": "XAF",
+    "duration": 180,
+    "nbTraining": 5
+  }
+]

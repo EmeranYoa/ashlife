@@ -1,0 +1,36 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ashlife-dev-111426-authRole",
+      "UnauthRoleArn": "arn:aws:iam::032561936498:role/amplify-ashlife-dev-111426-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::032561936498:role/amplify-ashlife-dev-111426-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-ashlife-dev-111426-deployment",
+      "UnauthRoleName": "amplify-ashlife-dev-111426-unauthRole",
+      "StackName": "amplify-ashlife-dev-111426",
+      "StackId": "arn:aws:cloudformation:us-east-1:032561936498:stack/amplify-ashlife-dev-111426/5a287320-bf2c-11ed-8558-0ef01e89717f",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-ashlife-dev-111426-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "ashlifeedf7c166": {}
+      },
+      "api": {
+        "ashlife": {},
+        "apicbb410f6": {}
+      },
+      "storage": {
+        "ashlifeStorage": {}
+      },
+      "function": {
+        "ashlifebe162ac0": {},
+        "ashlife19f30d00": {},
+        "ashlife3c202a87": {},
+        "ashlife2073c592": {
+          "deploymentBucketName": "amplify-ashlife-dev-111426-deployment",
+          "s3Key": "amplify-builds/ashlife2073c592-51384c315151796a5535-build.zip"
+        }
+      }
+    }
+  }
+}

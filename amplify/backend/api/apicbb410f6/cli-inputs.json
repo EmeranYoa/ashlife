@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "paths": {
+    "/training": {
+      "name": "/training",
+      "lambdaFunction": "ashlife2073c592",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/txt2img": {
+      "name": "/txt2img",
+      "lambdaFunction": "ashlife2073c592",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/img2img": {
+      "name": "/img2img",
+      "lambdaFunction": "ashlife2073c592",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/webhook": {
+      "name": "/webhook",
+      "lambdaFunction": "ashlife2073c592",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
