@@ -20,14 +20,12 @@
 // ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
 
 import 'ModelProvider.dart';
-import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/amplify_core.dart' as amplify_core;
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 
 
 /** This is an auto generated class representing the Generation type in your schema. */
-@immutable
-class Generation extends Model {
+class Generation extends amplify_core.Model {
   static const classType = const _GenerationModelType();
   final String id;
   final User? _user;
@@ -38,8 +36,8 @@ class Generation extends Model {
   final String? _data;
   final int? _number;
   final List<Image>? _images;
-  final TemporalDateTime? _createdAt;
-  final TemporalDateTime? _updatedAt;
+  final amplify_core.TemporalDateTime? _createdAt;
+  final amplify_core.TemporalDateTime? _updatedAt;
 
   @override
   getInstanceType() => classType;
@@ -58,10 +56,10 @@ class Generation extends Model {
     try {
       return _user!;
     } catch(e) {
-      throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -71,10 +69,10 @@ class Generation extends Model {
     try {
       return _filter!;
     } catch(e) {
-      throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -84,10 +82,10 @@ class Generation extends Model {
     try {
       return _process!;
     } catch(e) {
-      throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -113,11 +111,11 @@ class Generation extends Model {
     return _images;
   }
   
-  TemporalDateTime? get createdAt {
+  amplify_core.TemporalDateTime? get createdAt {
     return _createdAt;
   }
   
-  TemporalDateTime? get updatedAt {
+  amplify_core.TemporalDateTime? get updatedAt {
     return _updatedAt;
   }
   
@@ -125,7 +123,7 @@ class Generation extends Model {
   
   factory Generation({String? id, required User user, required Filter filter, required String process, String? providerId, String? modelId, String? data, int? number, List<Image>? images}) {
     return Generation._internal(
-      id: id == null ? UUID.getUUID() : id,
+      id: id == null ? amplify_core.UUID.getUUID() : id,
       user: user,
       filter: filter,
       process: process,
@@ -192,6 +190,29 @@ class Generation extends Model {
       images: images ?? this.images);
   }
   
+  Generation copyWithModelFieldValues({
+    ModelFieldValue<User>? user,
+    ModelFieldValue<Filter>? filter,
+    ModelFieldValue<String>? process,
+    ModelFieldValue<String?>? providerId,
+    ModelFieldValue<String?>? modelId,
+    ModelFieldValue<String?>? data,
+    ModelFieldValue<int?>? number,
+    ModelFieldValue<List<Image>?>? images
+  }) {
+    return Generation._internal(
+      id: id,
+      user: user == null ? this.user : user.value,
+      filter: filter == null ? this.filter : filter.value,
+      process: process == null ? this.process : process.value,
+      providerId: providerId == null ? this.providerId : providerId.value,
+      modelId: modelId == null ? this.modelId : modelId.value,
+      data: data == null ? this.data : data.value,
+      number: number == null ? this.number : number.value,
+      images: images == null ? this.images : images.value
+    );
+  }
+  
   Generation.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _user = json['user']?['serializedData'] != null
@@ -211,119 +232,129 @@ class Generation extends Model {
           .map((e) => Image.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
-      _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
+      _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
+      _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
     'id': id, 'user': _user?.toJson(), 'filter': _filter?.toJson(), 'process': _process, 'providerId': _providerId, 'modelId': _modelId, 'data': _data, 'number': _number, 'images': _images?.map((Image? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'user': _user, 'filter': _filter, 'process': _process, 'providerId': _providerId, 'modelId': _modelId, 'data': _data, 'number': _number, 'images': _images, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id,
+    'user': _user,
+    'filter': _filter,
+    'process': _process,
+    'providerId': _providerId,
+    'modelId': _modelId,
+    'data': _data,
+    'number': _number,
+    'images': _images,
+    'createdAt': _createdAt,
+    'updatedAt': _updatedAt
   };
 
-  static final QueryModelIdentifier<GenerationModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<GenerationModelIdentifier>();
-  static final QueryField ID = QueryField(fieldName: "id");
-  static final QueryField USER = QueryField(
+  static final amplify_core.QueryModelIdentifier<GenerationModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<GenerationModelIdentifier>();
+  static final ID = amplify_core.QueryField(fieldName: "id");
+  static final USER = amplify_core.QueryField(
     fieldName: "user",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: 'User'));
-  static final QueryField FILTER = QueryField(
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'User'));
+  static final FILTER = amplify_core.QueryField(
     fieldName: "filter",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: 'Filter'));
-  static final QueryField PROCESS = QueryField(fieldName: "process");
-  static final QueryField PROVIDERID = QueryField(fieldName: "providerId");
-  static final QueryField MODELID = QueryField(fieldName: "modelId");
-  static final QueryField DATA = QueryField(fieldName: "data");
-  static final QueryField NUMBER = QueryField(fieldName: "number");
-  static final QueryField IMAGES = QueryField(fieldName: "images");
-  static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Filter'));
+  static final PROCESS = amplify_core.QueryField(fieldName: "process");
+  static final PROVIDERID = amplify_core.QueryField(fieldName: "providerId");
+  static final MODELID = amplify_core.QueryField(fieldName: "modelId");
+  static final DATA = amplify_core.QueryField(fieldName: "data");
+  static final NUMBER = amplify_core.QueryField(fieldName: "number");
+  static final IMAGES = amplify_core.QueryField(fieldName: "images");
+  static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Generation";
     modelSchemaDefinition.pluralName = "Generations";
     
     modelSchemaDefinition.authRules = [
-      AuthRule(
-        authStrategy: AuthStrategy.OWNER,
+      amplify_core.AuthRule(
+        authStrategy: amplify_core.AuthStrategy.OWNER,
         ownerField: "owner",
         identityClaim: "cognito:username",
-        provider: AuthRuleProvider.USERPOOLS,
-        operations: [
-          ModelOperation.CREATE,
-          ModelOperation.UPDATE,
-          ModelOperation.DELETE,
-          ModelOperation.READ
+        provider: amplify_core.AuthRuleProvider.USERPOOLS,
+        operations: const [
+          amplify_core.ModelOperation.CREATE,
+          amplify_core.ModelOperation.UPDATE,
+          amplify_core.ModelOperation.DELETE,
+          amplify_core.ModelOperation.READ
         ])
     ];
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.id());
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
       key: Generation.USER,
       isRequired: true,
       targetNames: ['userGenerationsId'],
       ofModelName: 'User'
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
       key: Generation.FILTER,
       isRequired: true,
       targetNames: ['filterGenerationsId'],
       ofModelName: 'Filter'
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: Generation.PROCESS,
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: Generation.PROVIDERID,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: Generation.MODELID,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: Generation.DATA,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: Generation.NUMBER,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
       fieldName: 'images',
       isRequired: false,
       isArray: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Image')
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Image')
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
       fieldName: 'createdAt',
       isRequired: false,
       isReadOnly: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
       fieldName: 'updatedAt',
       isRequired: false,
       isReadOnly: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
     ));
   });
 }
 
-class _GenerationModelType extends ModelType<Generation> {
+class _GenerationModelType extends amplify_core.ModelType<Generation> {
   const _GenerationModelType();
   
   @override
@@ -341,8 +372,7 @@ class _GenerationModelType extends ModelType<Generation> {
  * This is an auto generated class representing the model identifier
  * of [Generation] in your schema.
  */
-@immutable
-class GenerationModelIdentifier implements ModelIdentifier<Generation> {
+class GenerationModelIdentifier implements amplify_core.ModelIdentifier<Generation> {
   final String id;
 
   /** Create an instance of GenerationModelIdentifier using [id] the primary key. */

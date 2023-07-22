@@ -20,22 +20,21 @@
 // ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
 
 import 'ModelProvider.dart';
-import 'package:amplify_core/amplify_core.dart';
-import 'package:flutter/foundation.dart';
+import 'package:amplify_core/amplify_core.dart' as amplify_core;
+
 
 /** This is an auto generated class representing the SubscriptionPlan type in your schema. */
-@immutable
-class SubscriptionPlan extends Model {
+class SubscriptionPlan extends amplify_core.Model {
   static const classType = const _SubscriptionPlanModelType();
   final String id;
   final User? _user;
   final Plan? _plan;
   final int? _remainSX;
   final int? _remainTraining;
-  final TemporalDateTime? _startAt;
+  final amplify_core.TemporalDateTime? _startAt;
   final PLAN_STATUS? _status;
-  final TemporalDateTime? _createdAt;
-  final TemporalDateTime? _updatedAt;
+  final amplify_core.TemporalDateTime? _createdAt;
+  final amplify_core.TemporalDateTime? _updatedAt;
 
   @override
   getInstanceType() => classType;
@@ -46,19 +45,23 @@ class SubscriptionPlan extends Model {
   String getId() => id;
 
   SubscriptionPlanModelIdentifier get modelIdentifier {
-    return SubscriptionPlanModelIdentifier(id: id);
+    return SubscriptionPlanModelIdentifier(
+        id: id
+    );
   }
 
   User get user {
     try {
       return _user!;
     } catch (e) {
-      throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages
               .codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion: AmplifyExceptionMessages
+          recoverySuggestion:
+          amplify_core.AmplifyExceptionMessages
               .codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString());
+          underlyingException: e.toString()
+      );
     }
   }
 
@@ -74,7 +77,7 @@ class SubscriptionPlan extends Model {
     return _remainTraining;
   }
 
-  TemporalDateTime? get startAt {
+  amplify_core.TemporalDateTime? get startAt {
     return _startAt;
   }
 
@@ -82,24 +85,16 @@ class SubscriptionPlan extends Model {
     return _status;
   }
 
-  TemporalDateTime? get createdAt {
+  amplify_core.TemporalDateTime? get createdAt {
     return _createdAt;
   }
 
-  TemporalDateTime? get updatedAt {
+  amplify_core.TemporalDateTime? get updatedAt {
     return _updatedAt;
   }
 
   const SubscriptionPlan._internal(
-      {required this.id,
-      required user,
-      plan,
-      remainSX,
-      remainTraining,
-      startAt,
-      status,
-      createdAt,
-      updatedAt})
+      {required this.id, required user, plan, remainSX, remainTraining, startAt, status, createdAt, updatedAt})
       : _user = user,
         _plan = plan,
         _remainSX = remainSX,
@@ -110,15 +105,10 @@ class SubscriptionPlan extends Model {
         _updatedAt = updatedAt;
 
   factory SubscriptionPlan(
-      {String? id,
-      required User user,
-      Plan? plan,
-      int? remainSX,
-      int? remainTraining,
-      TemporalDateTime? startAt,
-      PLAN_STATUS? status}) {
+      {String? id, required User user, Plan? plan, int? remainSX, int? remainTraining, amplify_core
+          .TemporalDateTime? startAt, PLAN_STATUS? status}) {
     return SubscriptionPlan._internal(
-        id: id == null ? UUID.getUUID() : id,
+        id: id == null ? amplify_core.UUID.getUUID() : id,
         user: user,
         plan: plan,
         remainSX: remainSX,
@@ -155,19 +145,20 @@ class SubscriptionPlan extends Model {
     buffer.write("id=" + "$id" + ", ");
     buffer.write("user=" + (_user != null ? _user!.toString() : "null") + ", ");
     buffer.write("plan=" + (_plan != null ? _plan!.toString() : "null") + ", ");
-    buffer.write("remainSX=" +
-        (_remainSX != null ? _remainSX!.toString() : "null") +
-        ", ");
+    buffer.write(
+        "remainSX=" + (_remainSX != null ? _remainSX!.toString() : "null") +
+            ", ");
     buffer.write("remainTraining=" +
         (_remainTraining != null ? _remainTraining!.toString() : "null") +
         ", ");
     buffer.write(
         "startAt=" + (_startAt != null ? _startAt!.format() : "null") + ", ");
-    buffer.write(
-        "status=" + (_status != null ? enumToString(_status)! : "null") + ", ");
-    buffer.write("createdAt=" +
-        (_createdAt != null ? _createdAt!.format() : "null") +
+    buffer.write("status=" +
+        (_status != null ? amplify_core.enumToString(_status)! : "null") +
         ", ");
+    buffer.write(
+        "createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") +
+            ", ");
     buffer.write(
         "updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -176,12 +167,8 @@ class SubscriptionPlan extends Model {
   }
 
   SubscriptionPlan copyWith(
-      {User? user,
-      Plan? plan,
-      int? remainSX,
-      int? remainTraining,
-      TemporalDateTime? startAt,
-      PLAN_STATUS? status}) {
+      {User? user, Plan? plan, int? remainSX, int? remainTraining, amplify_core
+          .TemporalDateTime? startAt, PLAN_STATUS? status}) {
     return SubscriptionPlan._internal(
         id: id,
         user: user ?? this.user,
@@ -192,43 +179,63 @@ class SubscriptionPlan extends Model {
         status: status ?? this.status);
   }
 
+  SubscriptionPlan copyWithModelFieldValues({
+    ModelFieldValue<User>? user,
+    ModelFieldValue<Plan?>? plan,
+    ModelFieldValue<int?>? remainSX,
+    ModelFieldValue<int?>? remainTraining,
+    ModelFieldValue<amplify_core.TemporalDateTime?>? startAt,
+    ModelFieldValue<PLAN_STATUS?>? status
+  }) {
+    return SubscriptionPlan._internal(
+        id: id,
+        user: user == null ? this.user : user.value,
+        plan: plan == null ? this.plan : plan.value,
+        remainSX: remainSX == null ? this.remainSX : remainSX.value,
+        remainTraining: remainTraining == null
+            ? this.remainTraining
+            : remainTraining.value,
+        startAt: startAt == null ? this.startAt : startAt.value,
+        status: status == null ? this.status : status.value
+    );
+  }
+
   SubscriptionPlan.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         _user = json['user']?['serializedData'] != null
             ? User.fromJson(
-                new Map<String, dynamic>.from(json['user']['serializedData']))
+            new Map<String, dynamic>.from(json['user']['serializedData']))
             : null,
         _plan = json['plan']?['serializedData'] != null
             ? Plan.fromJson(
-                new Map<String, dynamic>.from(json['plan']['serializedData']))
+            new Map<String, dynamic>.from(json['plan']['serializedData']))
             : null,
         _remainSX = (json['remainSX'] as num?)?.toInt(),
         _remainTraining = (json['remainTraining'] as num?)?.toInt(),
-        _startAt = json['startAt'] != null
-            ? TemporalDateTime.fromString(json['startAt'])
-            : null,
-        _status =
-            enumFromString<PLAN_STATUS>(json['status'], PLAN_STATUS.values),
-        _createdAt = json['createdAt'] != null
-            ? TemporalDateTime.fromString(json['createdAt'])
-            : null,
-        _updatedAt = json['updatedAt'] != null
-            ? TemporalDateTime.fromString(json['updatedAt'])
-            : null;
+        _startAt = json['startAt'] != null ? amplify_core.TemporalDateTime
+            .fromString(json['startAt']) : null,
+        _status = amplify_core.enumFromString<PLAN_STATUS>(
+            json['status'], PLAN_STATUS.values),
+        _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime
+            .fromString(json['createdAt']) : null,
+        _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime
+            .fromString(json['updatedAt']) : null;
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'id': id,
         'user': _user?.toJson(),
         'plan': _plan?.toJson(),
         'remainSX': _remainSX,
         'remainTraining': _remainTraining,
         'startAt': _startAt?.format(),
-        'status': enumToString(_status),
+        'status': amplify_core.enumToString(_status),
         'createdAt': _createdAt?.format(),
         'updatedAt': _updatedAt?.format()
       };
 
-  Map<String, Object?> toMap() => {
+  Map<String, Object?> toMap() =>
+      {
         'id': id,
         'user': _user,
         'plan': _plan,
@@ -240,87 +247,108 @@ class SubscriptionPlan extends Model {
         'updatedAt': _updatedAt
       };
 
-  static final QueryModelIdentifier<SubscriptionPlanModelIdentifier>
-      MODEL_IDENTIFIER =
-      QueryModelIdentifier<SubscriptionPlanModelIdentifier>();
-  static final QueryField ID = QueryField(fieldName: "id");
-  static final QueryField USER = QueryField(
+  static final amplify_core.QueryModelIdentifier<
+      SubscriptionPlanModelIdentifier> MODEL_IDENTIFIER = amplify_core
+      .QueryModelIdentifier<SubscriptionPlanModelIdentifier>();
+  static final ID = amplify_core.QueryField(fieldName: "id");
+  static final USER = amplify_core.QueryField(
       fieldName: "user",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: 'User'));
-  static final QueryField PLAN = QueryField(fieldName: "plan");
-  static final QueryField REMAINSX = QueryField(fieldName: "remainSX");
-  static final QueryField REMAINTRAINING =
-      QueryField(fieldName: "remainTraining");
-  static final QueryField STARTAT = QueryField(fieldName: "startAt");
-  static final QueryField STATUS = QueryField(fieldName: "status");
-  static var schema =
-      Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "SubscriptionPlan";
-    modelSchemaDefinition.pluralName = "SubscriptionPlans";
+      fieldType: amplify_core.ModelFieldType(
+          amplify_core.ModelFieldTypeEnum.model, ofModelName: 'User'));
+  static final PLAN = amplify_core.QueryField(fieldName: "plan");
+  static final REMAINSX = amplify_core.QueryField(fieldName: "remainSX");
+  static final REMAINTRAINING = amplify_core.QueryField(
+      fieldName: "remainTraining");
+  static final STARTAT = amplify_core.QueryField(fieldName: "startAt");
+  static final STATUS = amplify_core.QueryField(fieldName: "status");
+  static var schema = amplify_core.Model.defineSchema(
+      define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
+        modelSchemaDefinition.name = "SubscriptionPlan";
+        modelSchemaDefinition.pluralName = "SubscriptionPlans";
 
-    modelSchemaDefinition.authRules = [
-      AuthRule(
-          authStrategy: AuthStrategy.OWNER,
-          ownerField: "owner",
-          identityClaim: "cognito:username",
-          provider: AuthRuleProvider.USERPOOLS,
-          operations: [
-            ModelOperation.CREATE,
-            ModelOperation.UPDATE,
-            ModelOperation.DELETE,
-            ModelOperation.READ
-          ])
-    ];
+        modelSchemaDefinition.authRules = [
+          amplify_core.AuthRule(
+              authStrategy: amplify_core.AuthStrategy.OWNER,
+              ownerField: "owner",
+              identityClaim: "cognito:username",
+              provider: amplify_core.AuthRuleProvider.USERPOOLS,
+              operations: const [
+                amplify_core.ModelOperation.CREATE,
+                amplify_core.ModelOperation.UPDATE,
+                amplify_core.ModelOperation.DELETE,
+                amplify_core.ModelOperation.READ
+              ])
+        ];
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.id());
+        modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-        key: SubscriptionPlan.USER,
-        isRequired: true,
-        targetNames: ['userPlansId'],
-        ofModelName: 'User'));
+        modelSchemaDefinition.addField(
+            amplify_core.ModelFieldDefinition.belongsTo(
+                key: SubscriptionPlan.USER,
+                isRequired: true,
+                targetNames: ['userPlansId'],
+                ofModelName: 'User'
+            ));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
-        fieldName: 'plan',
-        isRequired: false,
-        ofType: ModelFieldType(ModelFieldTypeEnum.embedded,
-            ofCustomTypeName: 'Plan')));
+        modelSchemaDefinition.addField(
+            amplify_core.ModelFieldDefinition.embedded(
+                fieldName: 'plan',
+                isRequired: false,
+                ofType: amplify_core.ModelFieldType(
+                    amplify_core.ModelFieldTypeEnum.embedded,
+                    ofCustomTypeName: 'Plan')
+            ));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: SubscriptionPlan.REMAINSX,
-        isRequired: false,
-        ofType: ModelFieldType(ModelFieldTypeEnum.int)));
+        modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+            key: SubscriptionPlan.REMAINSX,
+            isRequired: false,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.int)
+        ));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: SubscriptionPlan.REMAINTRAINING,
-        isRequired: false,
-        ofType: ModelFieldType(ModelFieldTypeEnum.int)));
+        modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+            key: SubscriptionPlan.REMAINTRAINING,
+            isRequired: false,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.int)
+        ));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: SubscriptionPlan.STARTAT,
-        isRequired: false,
-        ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
+        modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+            key: SubscriptionPlan.STARTAT,
+            isRequired: false,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.dateTime)
+        ));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: SubscriptionPlan.STATUS,
-        isRequired: false,
-        ofType: ModelFieldType(ModelFieldTypeEnum.enumeration)));
+        modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+            key: SubscriptionPlan.STATUS,
+            isRequired: false,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.enumeration)
+        ));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
-        fieldName: 'createdAt',
-        isRequired: false,
-        isReadOnly: true,
-        ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
+        modelSchemaDefinition.addField(
+            amplify_core.ModelFieldDefinition.nonQueryField(
+                fieldName: 'createdAt',
+                isRequired: false,
+                isReadOnly: true,
+                ofType: amplify_core.ModelFieldType(
+                    amplify_core.ModelFieldTypeEnum.dateTime)
+            ));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
-        fieldName: 'updatedAt',
-        isRequired: false,
-        isReadOnly: true,
-        ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
-  });
+        modelSchemaDefinition.addField(
+            amplify_core.ModelFieldDefinition.nonQueryField(
+                fieldName: 'updatedAt',
+                isRequired: false,
+                isReadOnly: true,
+                ofType: amplify_core.ModelFieldType(
+                    amplify_core.ModelFieldTypeEnum.dateTime)
+            ));
+      });
 }
 
-class _SubscriptionPlanModelType extends ModelType<SubscriptionPlan> {
+class _SubscriptionPlanModelType
+    extends amplify_core.ModelType<SubscriptionPlan> {
   const _SubscriptionPlanModelType();
 
   @override
@@ -338,22 +366,26 @@ class _SubscriptionPlanModelType extends ModelType<SubscriptionPlan> {
  * This is an auto generated class representing the model identifier
  * of [SubscriptionPlan] in your schema.
  */
-@immutable
 class SubscriptionPlanModelIdentifier
-    implements ModelIdentifier<SubscriptionPlan> {
+    implements amplify_core.ModelIdentifier<SubscriptionPlan> {
   final String id;
 
   /** Create an instance of SubscriptionPlanModelIdentifier using [id] the primary key. */
-  const SubscriptionPlanModelIdentifier({required this.id});
+  const SubscriptionPlanModelIdentifier({
+    required this.id});
 
   @override
-  Map<String, dynamic> serializeAsMap() => (<String, dynamic>{'id': id});
+  Map<String, dynamic> serializeAsMap() =>
+      (<String, dynamic>{
+        'id': id
+      });
 
   @override
-  List<Map<String, dynamic>> serializeAsList() => serializeAsMap()
-      .entries
-      .map((entry) => (<String, dynamic>{entry.key: entry.value}))
-      .toList();
+  List<Map<String, dynamic>> serializeAsList() =>
+      serializeAsMap()
+          .entries
+          .map((entry) => (<String, dynamic>{ entry.key: entry.value}))
+          .toList();
 
   @override
   String serializeAsString() => serializeAsMap().values.join('#');
@@ -367,9 +399,11 @@ class SubscriptionPlanModelIdentifier
       return true;
     }
 
-    return other is SubscriptionPlanModelIdentifier && id == other.id;
+    return other is SubscriptionPlanModelIdentifier &&
+        id == other.id;
   }
 
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode =>
+      id.hashCode;
 }

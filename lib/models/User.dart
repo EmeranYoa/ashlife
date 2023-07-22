@@ -20,14 +20,12 @@
 // ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
 
 import 'ModelProvider.dart';
-import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/amplify_core.dart' as amplify_core;
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 
 
 /** This is an auto generated class representing the User type in your schema. */
-@immutable
-class User extends Model {
+class User extends amplify_core.Model {
   static const classType = const _UserModelType();
   final String id;
   final String? _phone;
@@ -39,8 +37,9 @@ class User extends Model {
   final List<Image>? _favorites;
   final Image? _avatar;
   final List<UserModel>? _models;
-  final TemporalDateTime? _createdAt;
-  final TemporalDateTime? _updatedAt;
+  final String? _datasetId;
+  final amplify_core.TemporalDateTime? _createdAt;
+  final amplify_core.TemporalDateTime? _updatedAt;
 
   @override
   getInstanceType() => classType;
@@ -91,19 +90,23 @@ class User extends Model {
     return _models;
   }
   
-  TemporalDateTime? get createdAt {
+  String? get datasetId {
+    return _datasetId;
+  }
+  
+  amplify_core.TemporalDateTime? get createdAt {
     return _createdAt;
   }
   
-  TemporalDateTime? get updatedAt {
+  amplify_core.TemporalDateTime? get updatedAt {
     return _updatedAt;
   }
   
-  const User._internal({required this.id, phone, name, email, generations, plans, images, favorites, avatar, models, createdAt, updatedAt}): _phone = phone, _name = name, _email = email, _generations = generations, _plans = plans, _images = images, _favorites = favorites, _avatar = avatar, _models = models, _createdAt = createdAt, _updatedAt = updatedAt;
+  const User._internal({required this.id, phone, name, email, generations, plans, images, favorites, avatar, models, datasetId, createdAt, updatedAt}): _phone = phone, _name = name, _email = email, _generations = generations, _plans = plans, _images = images, _favorites = favorites, _avatar = avatar, _models = models, _datasetId = datasetId, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory User({String? id, String? phone, String? name, String? email, List<Generation>? generations, List<SubscriptionPlan>? plans, List<Image>? images, List<Image>? favorites, Image? avatar, List<UserModel>? models}) {
+  factory User({String? id, String? phone, String? name, String? email, List<Generation>? generations, List<SubscriptionPlan>? plans, List<Image>? images, List<Image>? favorites, Image? avatar, List<UserModel>? models, String? datasetId}) {
     return User._internal(
-      id: id == null ? UUID.getUUID() : id,
+      id: id == null ? amplify_core.UUID.getUUID() : id,
       phone: phone,
       name: name,
       email: email,
@@ -112,7 +115,8 @@ class User extends Model {
       images: images != null ? List<Image>.unmodifiable(images) : images,
       favorites: favorites != null ? List<Image>.unmodifiable(favorites) : favorites,
       avatar: avatar,
-      models: models != null ? List<UserModel>.unmodifiable(models) : models);
+      models: models != null ? List<UserModel>.unmodifiable(models) : models,
+      datasetId: datasetId);
   }
   
   bool equals(Object other) {
@@ -132,7 +136,8 @@ class User extends Model {
       DeepCollectionEquality().equals(_images, other._images) &&
       DeepCollectionEquality().equals(_favorites, other._favorites) &&
       _avatar == other._avatar &&
-      DeepCollectionEquality().equals(_models, other._models);
+      DeepCollectionEquality().equals(_models, other._models) &&
+      _datasetId == other._datasetId;
   }
   
   @override
@@ -151,6 +156,7 @@ class User extends Model {
     buffer.write("favorites=" + (_favorites != null ? _favorites!.toString() : "null") + ", ");
     buffer.write("avatar=" + (_avatar != null ? _avatar!.toString() : "null") + ", ");
     buffer.write("models=" + (_models != null ? _models!.toString() : "null") + ", ");
+    buffer.write("datasetId=" + "$_datasetId" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -158,7 +164,7 @@ class User extends Model {
     return buffer.toString();
   }
   
-  User copyWith({String? phone, String? name, String? email, List<Generation>? generations, List<SubscriptionPlan>? plans, List<Image>? images, List<Image>? favorites, Image? avatar, List<UserModel>? models}) {
+  User copyWith({String? phone, String? name, String? email, List<Generation>? generations, List<SubscriptionPlan>? plans, List<Image>? images, List<Image>? favorites, Image? avatar, List<UserModel>? models, String? datasetId}) {
     return User._internal(
       id: id,
       phone: phone ?? this.phone,
@@ -169,7 +175,35 @@ class User extends Model {
       images: images ?? this.images,
       favorites: favorites ?? this.favorites,
       avatar: avatar ?? this.avatar,
-      models: models ?? this.models);
+      models: models ?? this.models,
+      datasetId: datasetId ?? this.datasetId);
+  }
+  
+  User copyWithModelFieldValues({
+    ModelFieldValue<String?>? phone,
+    ModelFieldValue<String?>? name,
+    ModelFieldValue<String?>? email,
+    ModelFieldValue<List<Generation>?>? generations,
+    ModelFieldValue<List<SubscriptionPlan>?>? plans,
+    ModelFieldValue<List<Image>?>? images,
+    ModelFieldValue<List<Image>?>? favorites,
+    ModelFieldValue<Image?>? avatar,
+    ModelFieldValue<List<UserModel>?>? models,
+    ModelFieldValue<String?>? datasetId
+  }) {
+    return User._internal(
+      id: id,
+      phone: phone == null ? this.phone : phone.value,
+      name: name == null ? this.name : name.value,
+      email: email == null ? this.email : email.value,
+      generations: generations == null ? this.generations : generations.value,
+      plans: plans == null ? this.plans : plans.value,
+      images: images == null ? this.images : images.value,
+      favorites: favorites == null ? this.favorites : favorites.value,
+      avatar: avatar == null ? this.avatar : avatar.value,
+      models: models == null ? this.models : models.value,
+      datasetId: datasetId == null ? this.datasetId : datasetId.value
+    );
   }
   
   User.fromJson(Map<String, dynamic> json)  
@@ -210,128 +244,148 @@ class User extends Model {
           .map((e) => UserModel.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
-      _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
+      _datasetId = json['datasetId'],
+      _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
+      _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'phone': _phone, 'name': _name, 'email': _email, 'generations': _generations?.map((Generation? e) => e?.toJson()).toList(), 'plans': _plans?.map((SubscriptionPlan? e) => e?.toJson()).toList(), 'images': _images?.map((Image? e) => e?.toJson()).toList(), 'favorites': _favorites?.map((Image? e) => e?.toJson()).toList(), 'avatar': _avatar?.toJson(), 'models': _models?.map((UserModel? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'phone': _phone, 'name': _name, 'email': _email, 'generations': _generations?.map((Generation? e) => e?.toJson()).toList(), 'plans': _plans?.map((SubscriptionPlan? e) => e?.toJson()).toList(), 'images': _images?.map((Image? e) => e?.toJson()).toList(), 'favorites': _favorites?.map((Image? e) => e?.toJson()).toList(), 'avatar': _avatar?.toJson(), 'models': _models?.map((UserModel? e) => e?.toJson()).toList(), 'datasetId': _datasetId, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'phone': _phone, 'name': _name, 'email': _email, 'generations': _generations, 'plans': _plans, 'images': _images, 'favorites': _favorites, 'avatar': _avatar, 'models': _models, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id,
+    'phone': _phone,
+    'name': _name,
+    'email': _email,
+    'generations': _generations,
+    'plans': _plans,
+    'images': _images,
+    'favorites': _favorites,
+    'avatar': _avatar,
+    'models': _models,
+    'datasetId': _datasetId,
+    'createdAt': _createdAt,
+    'updatedAt': _updatedAt
   };
 
-  static final QueryModelIdentifier<UserModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<UserModelIdentifier>();
-  static final QueryField ID = QueryField(fieldName: "id");
-  static final QueryField PHONE = QueryField(fieldName: "phone");
-  static final QueryField NAME = QueryField(fieldName: "name");
-  static final QueryField EMAIL = QueryField(fieldName: "email");
-  static final QueryField GENERATIONS = QueryField(
+  static final amplify_core.QueryModelIdentifier<UserModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<UserModelIdentifier>();
+  static final ID = amplify_core.QueryField(fieldName: "id");
+  static final PHONE = amplify_core.QueryField(fieldName: "phone");
+  static final NAME = amplify_core.QueryField(fieldName: "name");
+  static final EMAIL = amplify_core.QueryField(fieldName: "email");
+  static final GENERATIONS = amplify_core.QueryField(
     fieldName: "generations",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: 'Generation'));
-  static final QueryField PLANS = QueryField(
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Generation'));
+  static final PLANS = amplify_core.QueryField(
     fieldName: "plans",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: 'SubscriptionPlan'));
-  static final QueryField IMAGES = QueryField(fieldName: "images");
-  static final QueryField FAVORITES = QueryField(fieldName: "favorites");
-  static final QueryField AVATAR = QueryField(fieldName: "avatar");
-  static final QueryField MODELS = QueryField(fieldName: "models");
-  static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'SubscriptionPlan'));
+  static final IMAGES = amplify_core.QueryField(fieldName: "images");
+  static final FAVORITES = amplify_core.QueryField(fieldName: "favorites");
+  static final AVATAR = amplify_core.QueryField(fieldName: "avatar");
+  static final MODELS = amplify_core.QueryField(fieldName: "models");
+  static final DATASETID = amplify_core.QueryField(fieldName: "datasetId");
+  static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "User";
     modelSchemaDefinition.pluralName = "Users";
     
     modelSchemaDefinition.authRules = [
-      AuthRule(
-        authStrategy: AuthStrategy.OWNER,
+      amplify_core.AuthRule(
+        authStrategy: amplify_core.AuthStrategy.OWNER,
         ownerField: "owner",
         identityClaim: "cognito:username",
-        provider: AuthRuleProvider.USERPOOLS,
-        operations: [
-          ModelOperation.CREATE,
-          ModelOperation.UPDATE,
-          ModelOperation.DELETE,
-          ModelOperation.READ
+        provider: amplify_core.AuthRuleProvider.USERPOOLS,
+        operations: const [
+          amplify_core.ModelOperation.CREATE,
+          amplify_core.ModelOperation.UPDATE,
+          amplify_core.ModelOperation.DELETE,
+          amplify_core.ModelOperation.READ
         ])
     ];
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.id());
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: User.PHONE,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: User.NAME,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: User.EMAIL,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
       key: User.GENERATIONS,
       isRequired: false,
       ofModelName: 'Generation',
       associatedKey: Generation.USER
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
       key: User.PLANS,
       isRequired: false,
       ofModelName: 'SubscriptionPlan',
       associatedKey: SubscriptionPlan.USER
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
       fieldName: 'images',
       isRequired: false,
       isArray: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Image')
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Image')
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
       fieldName: 'favorites',
       isRequired: false,
       isArray: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Image')
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Image')
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
       fieldName: 'avatar',
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embedded, ofCustomTypeName: 'Image')
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embedded, ofCustomTypeName: 'Image')
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
       fieldName: 'models',
       isRequired: false,
       isArray: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'UserModel')
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'UserModel')
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: User.DATASETID,
+      isRequired: false,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
       fieldName: 'createdAt',
       isRequired: false,
       isReadOnly: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
       fieldName: 'updatedAt',
       isRequired: false,
       isReadOnly: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
     ));
   });
 }
 
-class _UserModelType extends ModelType<User> {
+class _UserModelType extends amplify_core.ModelType<User> {
   const _UserModelType();
   
   @override
@@ -349,8 +403,7 @@ class _UserModelType extends ModelType<User> {
  * This is an auto generated class representing the model identifier
  * of [User] in your schema.
  */
-@immutable
-class UserModelIdentifier implements ModelIdentifier<User> {
+class UserModelIdentifier implements amplify_core.ModelIdentifier<User> {
   final String id;
 
   /** Create an instance of UserModelIdentifier using [id] the primary key. */
