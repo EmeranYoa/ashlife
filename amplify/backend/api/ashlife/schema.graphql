@@ -1,97 +1,97 @@
 # This "input" configures a global authorization rule to enable public access to
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY {
-    globalAuthRule: AuthRule = {allow: public}
+  globalAuthRule: AuthRule = { allow: public }
 } # FOR TESTING ONLY!
-
-type Filter @model @auth(rules: [{allow: owner}]) {
-    id: ID!
-    name: String!
-    description: String
-    prompt: String!
-    negativePrompt: String!
-    plans: [Plan!]
-    generations: [Generation] @hasMany
-    image: Image!
-    model: String @default(value: "sd")
+type Filter @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  name: String!
+  description: String
+  prompt: String!
+  negativePrompt: String!
+  plans: [Plan!]
+  generations: [Generation] @hasMany
+  image: Image!
+  model: String @default(value: "sd")
+  dataSetId: String
 }
 
-type User @model @auth(rules: [{allow: owner}]) {
-    id: ID!
-    phone: AWSPhone
-    name: String
-    email: AWSEmail
-    generations: [Generation] @hasMany
-    plans: [SubscriptionPlan] @hasMany
-    images: [Image]
-    favorites: [Image]
-    avatar: Image
-    models: [UserModel] #Liste des models
+type User @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  phone: AWSPhone
+  name: String
+  email: AWSEmail
+  generations: [Generation] @hasMany
+  plans: [SubscriptionPlan] @hasMany
+  images: [Image]
+  favorites: [Image]
+  avatar: Image
+  models: [UserModel] #Liste des models
 }
 
-type Generation @model @auth(rules: [{allow: owner}]) {
-    id: ID!
-    user: User! @belongsTo
-    filter: Filter! @belongsTo
-    process: String!
-    providerId: String #id generer par dreambooth
-    modelId: String #id generer par dreambooth pour le model
-    data: String #
-    number: Int
-    images: [Image] #Photo generer
+type Generation @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  user: User! @belongsTo
+  filter: Filter! @belongsTo
+  process: String!
+  providerId: String #id generer par dreambooth
+  modelId: String #id generer par dreambooth pour le model
+  data: String #
+  number: Int
+  images: [Image] #Photo generer
 }
 
-type SubscriptionPlan @model @auth(rules: [{allow: owner}]) {
-    id: ID!
-    user: User! @belongsTo
-    plan: Plan
-    remainSX: Int #Reste de generation
-    remainTraining: Int #nombre d'antrainement restant
-    startAt: AWSDateTime
-    status: PLAN_STATUS @default(value: "NEW")
+type SubscriptionPlan @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  user: User! @belongsTo
+  plan: Plan
+  remainSX: Int #Reste de generation
+  remainTraining: Int #nombre d'antrainement restant
+  startAt: AWSDateTime
+  status: PLAN_STATUS @default(value: "NEW")
 }
 
 type Image {
-    height: Int
-    width: Int
-    path: String!
+  height: Int
+  width: Int
+  path: String!
 }
 
 type UserModel {
-    modelId: String
-    name: String
-    status: String
-    prompt: String
-    image: Image
+  modelId: String
+  name: String
+  status: String
+  prompt: String
+  image: Image
 }
 
 type Plan {
-    id: ID!
-    name: PLAN_TYPE!
-    limit: Int #nombre de requete
-    nbTraining: Int #nombre d'antrainement
-    size: Int #nombre de generation
-    price: Float
-    currency: CURRENCY
-    duration: Int #Nombre de jour du plan
+  id: ID!
+  name: PLAN_TYPE!
+  limit: Int #nombre de requete
+  nbTraining: Int #nombre d'antrainement
+  size: Int #nombre de generation
+  price: Float
+  currency: CURRENCY
+  duration: Int #Nombre de jour du plan
 }
 
 enum PLAN_TYPE {
-    BASIC #
-    PREMIUM
-    GOLD
-    TRIAL
+  BASIC #
+  PREMIUM
+  GOLD
+  TRIAL
 }
 
 enum CURRENCY {
-    XAF
-    USD
-    EUR
+  XAF
+  USD
+  EUR
 }
 
 enum PLAN_STATUS {
-    NEW
-    PENDING
-    END
-    CANCELED
+  NEW
+  PENDING
+  END
+  CANCELED
 }

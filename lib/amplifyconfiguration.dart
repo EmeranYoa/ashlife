@@ -14,8 +14,7 @@ const amplifyconfig = ''' {
                     "endpointType": "GraphQL",
                     "endpoint": "https://jqmtztnh3nct7bt4thgwrafrmy.appsync-api.us-east-1.amazonaws.com/graphql",
                     "region": "us-east-1",
-                    "authorizationType": "AMAZON_COGNITO_USER_POOLS",
-                    "apiKey": "da2-6be6mwqef5ezzb5ikanyqb7ksi"
+                    "authorizationType": "AMAZON_COGNITO_USER_POOLS"
                 }
             }
         }
@@ -39,7 +38,6 @@ const amplifyconfig = ''' {
                         "ApiUrl": "https://jqmtztnh3nct7bt4thgwrafrmy.appsync-api.us-east-1.amazonaws.com/graphql",
                         "Region": "us-east-1",
                         "AuthMode": "API_KEY",
-                        "ApiKey": "da2-6be6mwqef5ezzb5ikanyqb7ksi",
                         "ClientDatabasePrefix": "ashlife_API_KEY"
                     }
                 },
