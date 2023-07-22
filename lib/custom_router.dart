@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 
 class CustomRouter{
   static Route<dynamic> generateRoute(RouteSettings settings){
-    
+    //Route<dynamic> generateRoute(RouteSettings settings)
     switch (settings.name) {
       case '/':
         return GetPageRoute(routeName: '/', page: () => const SplashScreen());

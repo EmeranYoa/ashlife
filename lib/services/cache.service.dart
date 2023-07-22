@@ -9,13 +9,17 @@ class CacheService extends GetxService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setStringList('imageUrls', imageUrls);
   }
+
   Future<void> cacheImageFilterUrls(List<String> imageUrls) async {
+    print('================================');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setStringList('imageFilterUrls', imageUrls);
   }
 
   Future<List<String>> getCachedImageUrls() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print('-' * 100);
+    print(prefs.getStringList('imageUrls'));
     return prefs.getStringList('imageUrls') ?? [];
   }
 
@@ -36,6 +40,14 @@ class CacheService extends GetxService {
 
   void preloadImage(String imageUrl) async {
     await DefaultCacheManager().downloadFile(imageUrl);
+  }
+
+  Future<void> deleteFileCache(List imageUrl) async {
+    for (Map image in imageUrl) {
+      print('*' * 100);
+      print(image);
+      await DefaultCacheManager().removeFile(image['url']);
+    }
   }
 
   Future<File?> getImageFile(String imageUrl) async {

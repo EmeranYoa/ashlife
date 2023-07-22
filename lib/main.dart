@@ -43,7 +43,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: mainAppColor,
       ),
-      onGenerateRoute: CustomRouter.generateRoute,
+      onGenerateRoute:
+          CustomRouter.generateRoute, //Gestion des routes de l'application
       initialRoute: '/',
     );
   }
@@ -61,7 +62,7 @@ Future<void> _configureAmplify() async {
 
   try {
     await Amplify.configure(amplifyconfig);
-    // await Amplify.DataStore.clear();
+    await Amplify.DataStore.clear();
   } on AmplifyAlreadyConfiguredException {
     safePrint(
         "Tried to reconfigure Amplify; this can occur when your app restarts on Android.");
@@ -156,7 +157,7 @@ void callbackDispatcher() {
           Notify().showNotification(
               title: 'Model Loaded',
               body:
-                  'Your model has been loaded successfully, you cans use it now!',
+                  'Your model has been loaded successfully, you can use it now!',
               payLoad: '/main');
 
           return Future.value(true);

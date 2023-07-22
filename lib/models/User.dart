@@ -331,6 +331,7 @@ class User extends Model {
   });
 }
 
+// _UserModelType
 class _UserModelType extends ModelType<User> {
   const _UserModelType();
   
@@ -354,8 +355,7 @@ class UserModelIdentifier implements ModelIdentifier<User> {
   final String id;
 
   /** Create an instance of UserModelIdentifier using [id] the primary key. */
-  const UserModelIdentifier({
-    required this.id});
+  const UserModelIdentifier({ required this.id});
   
   @override
   Map<String, dynamic> serializeAsMap() => (<String, dynamic>{
