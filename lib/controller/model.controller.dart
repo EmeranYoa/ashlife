@@ -28,7 +28,7 @@ class ModelController extends GetxController {
   Future<void> getBaseModel() async {
     try {
       loading.value = true;
-      final response = await _httpService.post(_httpService.baseModelUrl);
+      final response = await _httpService.post(_httpService.baseUrl);
       List<Map<String, dynamic>> fResponse = [];
       for (Map<String, dynamic> model in response) {
         if (model['screenshots'].length <= 10) {

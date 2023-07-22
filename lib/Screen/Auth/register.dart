@@ -2,6 +2,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:ashlife/Screen/Auth/phoneverif.dart';
 import 'package:ashlife/models/ModelProvider.dart';
+import 'package:ashlife/services/http.service.dart';
 import 'package:ashlife/widgets/image.dart';
 import 'package:ashlife/widgets/widgets.dart';
 import 'package:email_validator/email_validator.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:get/get.dart';
+import 'dart:convert';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -22,6 +24,8 @@ class _RegisterState extends State<Register> {
   bool isSignUpComplete = false;
   bool isLoadingSignup = false;
   bool isLoading = false;
+
+  final HttpService _httpService = Get.put(HttpService());
   final phoneNumberController = TextEditingController();
   final nameController = TextEditingController();
   final sexeController = TextEditingController();
@@ -90,10 +94,16 @@ class _RegisterState extends State<Register> {
         options: CognitoSignUpOptions(userAttributes: userAttributes),
       );
 
+      final dataSetResult =
+          await _httpService.post('datasets', {'name': nameController.text});
+      final datasetId = dataSetResult["insert_datasets_one"]["id"];
+
       final user = User(
-          name: nameController.text,
-          phone: phoneNumberController.text,
-          email: emailController.text);
+        name: nameController.text,
+        phone: phoneNumberController.text,
+        email: emailController.text,
+        //dataSetId: ""
+      );
       await Amplify.DataStore.save(user);
 
       setState(() {
