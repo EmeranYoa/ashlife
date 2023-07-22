@@ -7,9 +7,11 @@ class HttpService {
   String dreamboothApiKey =
       "QRPI1z4lwCgPsWKbReXxfc1DDYey5CKPWMcCWeYYd8rAlzwSsNEUiMNzxdSe";
 
-  String baseModelUrl =
-      "https://stablediffusionapi.com/api/v4/dreambooth/model_list";
-
+  String baseUrl = "https://cloud.leonardo.ai/api/rest/v1/";
+  final Map<String, String> header = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer 51632624-42a8-46c8-8f81-84af4d904e28'
+  };
   String dreamboothTraining = "https://stablediffusionapi.com/api/v3/fine_tune";
   String dreamboothGetModelStatus =
       "https://stablediffusionapi.com/api/v3/fine_tune_status/";
@@ -46,9 +48,8 @@ class HttpService {
     // print(response.body);
     // return null;
     try {
-      final response = await http.post(Uri.parse(path),
-          body: jsonEncode({...?data, "key": dreamboothApiKey}),
-          headers: {'Content-Type': 'application/json'});
+      final response = await http.post(Uri.parse(baseUrl + path),
+          body: jsonEncode({...?data}), headers: header);
 
       return jsonDecode(response.body);
     } catch (e) {
