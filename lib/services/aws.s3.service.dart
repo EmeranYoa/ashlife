@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:get/get.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:amplify_core/amplify_core.dart';
-import 'package:amplify_datastore/amplify_datastore.dart';
 
 class AwsS3 extends GetxService {
   Future<String?> uploadFile(
@@ -48,32 +46,16 @@ class AwsS3 extends GetxService {
       return null;
     }
   }
-  Future<void> deleteData(String id) async {
-    
-    // try {
-    //   final List<ModelType> items = await Amplify.DataStore.query(ModelType.classType,
-    //     where: ModelType.ID.eq(id));
 
-    //   if (items.isNotEmpty) {
-    //     await Amplify.DataStore.delete(items[0]);
-    //     print('Data deleted successfully.');
-    //   } else {
-    //     print('Data not found.');
-    //   }
-    // } on Exception catch (e) {
-    // print('Error deleting data: $e');
-    // }
-  }
-  Future<bool> removeFile(List<dynamic> keys) async {
+  Future<bool> removeFile(List<String> keys) async {
     try {
-      for (Map<String, dynamic> key in keys) {
+      for (String key in keys) {
         final result = await Amplify.Storage.remove(
-          key: key['key'],
+          key: key,
         );
       }
       return true;
     } on StorageException catch (e) {
-      print('=*' * 50);
       safePrint(e.message);
       return false;
     }

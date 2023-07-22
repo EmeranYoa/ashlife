@@ -20,7 +20,6 @@ class CategoryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    //inittialData();
   }
 
   Future<void> inittialData() async {
@@ -43,8 +42,7 @@ class CategoryController extends GetxController {
       filterLoading.value = true;
       final f = await Amplify.DataStore.query(Filter.classType);
       List<Map<String, dynamic>> filterWithImage = [];
-      print("==*" * 25);
-      print(f);
+
       List<String> cachedImageFilterUrls =
           await cache.getCachedImageFilterUrls();
       bool newUrlCached = false;

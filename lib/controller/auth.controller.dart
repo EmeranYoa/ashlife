@@ -13,7 +13,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
-  RxList<dynamic> selectedImages = [].obs;
   RxBool isLoading = false.obs;
   Rx<User> user = User().obs;
   Rx<String> avatar = "".obs;
@@ -30,8 +29,6 @@ class AuthController extends GetxController {
   }
 
   Future<void> signInUser(String username, String password) async {
-    print(selectedImages);
-    print('=' * 100);
     try {
       isLoading.value = true;
       await authService.signIn(username, password);
@@ -43,8 +40,6 @@ class AuthController extends GetxController {
 
   Future<void> getCurrentUser() async {
     try {
-      print(selectedImages);
-      print('=' * 100);
       isLoading.value = true;
       bool isAuth = await checkAuthenticateUser();
 
@@ -54,8 +49,7 @@ class AuthController extends GetxController {
         final u = (await Amplify.DataStore.query(
           User.classType,
           where: User.PHONE.eq(us?.username),
-        ))
-            .first;
+        )).first;
 
         user.value = u;
         await getUserAvatar();
@@ -79,7 +73,7 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> editUserInformation(String name, String email) async {
+  Future<void> editUserInformation(String name, String email) async{
     try {
       isLoading.value = true;
       await authService.editUserInfo(name, email);
@@ -98,49 +92,46 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
+  Future<void> changeProfilePicture() async{
+      try{
+        isLoading.value = true;
+        XFile? pick = await _picker.pickImage(
+          source: ImageSource.gallery,
+        );
+        if (pick != null) {
+          File? croppedFile = await _imageCropper(image: pick);
+          if (croppedFile != null) {
+            const uuid = Uuid();
+            final ext = _awsS3.getExtension(file: croppedFile);
+            final key = "${uuid.v4()}.$ext";
+            final uploadKey = await _awsS3.uploadFile(local: croppedFile, key: key);
 
-  Future<void> changeProfilePicture() async {
-    try {
-      isLoading.value = true;
-      XFile? pick = await _picker.pickImage(
-        source: ImageSource.gallery,
-      );
-      if (pick != null) {
-        File? croppedFile = await _imageCropper(image: pick);
-        if (croppedFile != null) {
-          const uuid = Uuid();
-          final ext = _awsS3.getExtension(file: croppedFile);
-          final key = "${uuid.v4()}.$ext";
-          final uploadKey =
-              await _awsS3.uploadFile(local: croppedFile, key: key);
+            final userWithId = await Amplify.DataStore.query(
+              User.classType,
+              where: User.ID.eq(user.value.id),
+            );
 
-          final userWithId = await Amplify.DataStore.query(
-            User.classType,
-            where: User.ID.eq(user.value.id),
-          );
+            final oldUser = userWithId.first;
+            final newUser = oldUser.copyWith(avatar: Image(path: uploadKey!));
 
-          final oldUser = userWithId.first;
-          final newUser = oldUser.copyWith(avatar: Image(path: uploadKey!));
-
-          await Amplify.DataStore.save(newUser);
-          await getCurrentUser();
+            await Amplify.DataStore.save(newUser);
+            await getCurrentUser();
+          }
         }
+        isLoading.value = false;
+      } on Exception catch(e){
+        isLoading.value = false;
+        Get.snackbar("Error", e.toString());
       }
-      isLoading.value = false;
-    } on Exception catch (e) {
-      isLoading.value = false;
-      Get.snackbar("Error", e.toString());
-    }
   }
-
-  Future<void> getUserAvatar() async {
+  Future<void> getUserAvatar() async{
     bool newUrlCached = false;
     List<String> cachedImageUrls = await cache.getCachedImageUrls();
-    if (user.value.avatar != null) {
+    if(user.value.avatar != null){
       Map<dynamic, dynamic> keyUrl = cachedImageUrls
           .map((url) => jsonDecode(url))
           .firstWhere((map) => map.containsValue(user.value.avatar!.path),
-              orElse: () => {});
+          orElse: () => {});
 
       if (keyUrl.isNotEmpty) {
         File? file = await cache.getImageFile(keyUrl['url']);
@@ -156,10 +147,7 @@ class AuthController extends GetxController {
 
           File? file = await cache.getImageFile(imgUrl);
           if (file != null) {
-            Map<String, dynamic> img = {
-              "key": user.value.avatar!.path,
-              "url": imgUrl
-            };
+            Map<String, dynamic> img = {"key": user.value.avatar!.path, "url": imgUrl};
             cachedImageUrls.add(jsonEncode(img));
             avatar.value = file.path;
           }

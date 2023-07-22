@@ -8,7 +8,7 @@ class AlertDialog extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Color.fromARGB(255, 73, 238, 7)
+        color: Colors.white
       ),
       height: 200,
       width: 200,

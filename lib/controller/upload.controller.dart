@@ -39,14 +39,13 @@ class UploadController extends GetxController {
       if (value is List<File>) {
         _upload(value);
       } else {
-        _updateUserDataAddFile(value);
+        _updateUserData(value);
       }
     });
     super.onInit();
   }
 
   Future<void> getInitialData() async {
-    print('=======================INIT DATA=======================');
     List<Map<String, dynamic>> imagesList = [];
     try {
       loading.value = true;
@@ -58,14 +57,13 @@ class UploadController extends GetxController {
           .first;
 
       List<String> cachedImageUrls = await cache.getCachedImageUrls();
-
       bool newUrlCached = false;
 
       if (user.images != null) {
         for (Image image in user.images!) {
           Map<dynamic, dynamic> keyUrl = cachedImageUrls
               .map((url) => jsonDecode(url))
-              .firstWhere((map) => map.containsValue(image.path), //Retourne le 1er élément contient imgpath
+              .firstWhere((map) => map.containsValue(image.path),
                   orElse: () => {});
 
           if (keyUrl.isNotEmpty) {
@@ -76,6 +74,7 @@ class UploadController extends GetxController {
             }
           } else {
             String? imgUrl = await _awsS3.getFileUrl(key: image.path);
+
             if (imgUrl != null) {
               newUrlCached = true;
               cache.preloadImage(imgUrl);
@@ -161,30 +160,6 @@ class UploadController extends GetxController {
         where: User.PHONE.eq(phoneNumber),
       ))
           .first;
-      List<Image> userImages = [];
-
-      for (String key in keys) {
-        userImages.add(Image(path: key, height: 512, width: 512));
-      }
-      final newUserData = user.copyWith(images: userImages);
-
-      await Amplify.DataStore.save(newUserData);
-      getInitialData();
-      isUploading.value = false;
-    } on Exception catch (e) {
-      isUploading.value = false;
-      safePrint(e.toString());
-    }
-  }
-  
-  Future<void> _updateUserDataAddFile(List<String> keys) async {
-    try {
-      final phoneNumber = (await authService.getCurrentUser())?.username;
-      final user = (await Amplify.DataStore.query(
-        User.classType,
-        where: User.PHONE.eq(phoneNumber),
-      ))
-          .first;
       List<Image> userImages = user.images ?? [];
 
       for (String key in keys) {
@@ -232,20 +207,6 @@ class UploadController extends GetxController {
       images.value = imagesList;
       selectedImages.value = imagesList;
     }
-  }
-
-  Future<void> deleteAllSelectedItems() async {
-    for (Map image in selectedImages) {
-      images.contains(image) ? images.remove(image) : images = images;
-    }
-    List<dynamic> imageKeys = selectedImages;
-
-    await _awsS3.removeFile(imageKeys);
-    await cache.deleteCachedImageUrls();
-    List<String> keys = images.map((item) => item['key'] as String).toList();
-    await _updateUserData(keys);
-    // await cache.deleteFileCache(imageKeys);
-    await getInitialData();
   }
 
   void deleteImages() {

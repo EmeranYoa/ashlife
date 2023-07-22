@@ -120,9 +120,7 @@ class _UploadScreenState extends State<UploadScreen> {
                                 Icons.delete,
                                 color: Colors.white,
                               ),
-                              onPressed: () {
-                                controller.deleteAllSelectedItems();
-                              },
+                              onPressed: () {},
                             ),
                           ],
                         ),

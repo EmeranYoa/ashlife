@@ -30,13 +30,9 @@ class ModelController extends GetxController {
       loading.value = true;
       final response = await _httpService.post(_httpService.baseModelUrl);
       List<Map<String, dynamic>> fResponse = [];
+
       for (Map<String, dynamic> model in response) {
-        if (model['screenshots'].length <= 10) {
-          continue;
-        }
         File? file = await _cache.getImageFile(model['screenshots']!);
-        print('=' * 100);
-        print(model['screenshots']);
         fResponse.add({
           "model_id": model['model_id'],
           'status': model['status'],
@@ -64,10 +60,8 @@ class ModelController extends GetxController {
 
         List<Map<String, dynamic>> fResponse = [];
         final uM = u.models!;
+
         for (UserModel model in uM) {
-          if (model.status == "processing") {
-            continue;
-          }
           File? file = await _cache.getImageFile(model.image!.path);
           fResponse.add({
             "model_id": model.modelId,
