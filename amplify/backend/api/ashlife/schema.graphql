@@ -27,7 +27,8 @@ type User @model @auth(rules: [{ allow: owner }]) {
     favorites: [Image]
     avatar: Image
     models: [UserModel] #Liste des models
-    datasetId: String
+    datasetId: String,
+    model: AWSJSON
 }
 
 type Generation @model @auth(rules: [{ allow: owner }]) {

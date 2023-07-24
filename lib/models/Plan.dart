@@ -22,7 +22,6 @@
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
-
 /** This is an auto generated class representing the Plan type in your schema. */
 class Plan {
   final String id;
@@ -41,11 +40,9 @@ class Plan {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages
               .codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-          amplify_core.AmplifyExceptionMessages
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
               .codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-      );
+          underlyingException: e.toString());
     }
   }
 
@@ -74,7 +71,14 @@ class Plan {
   }
 
   const Plan._internal(
-      {required this.id, required name, limit, nbTraining, size, price, currency, duration})
+      {required this.id,
+      required name,
+      limit,
+      nbTraining,
+      size,
+      price,
+      currency,
+      duration})
       : _name = name,
         _limit = limit,
         _nbTraining = nbTraining,
@@ -84,7 +88,14 @@ class Plan {
         _duration = duration;
 
   factory Plan(
-      {String? id, required PLAN_TYPE name, int? limit, int? nbTraining, int? size, double? price, CURRENCY? currency, int? duration}) {
+      {String? id,
+      required PLAN_TYPE name,
+      int? limit,
+      int? nbTraining,
+      int? size,
+      double? price,
+      CURRENCY? currency,
+      int? duration}) {
     return Plan._internal(
         id: id == null ? amplify_core.UUID.getUUID() : id,
         name: name,
@@ -123,13 +134,14 @@ class Plan {
 
     buffer.write("Plan {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write(
-        "name=" + (_name != null ? amplify_core.enumToString(_name)! : "null") +
-            ", ");
+    buffer.write("name=" +
+        (_name != null ? amplify_core.enumToString(_name)! : "null") +
+        ", ");
     buffer.write(
         "limit=" + (_limit != null ? _limit!.toString() : "null") + ", ");
     buffer.write("nbTraining=" +
-        (_nbTraining != null ? _nbTraining!.toString() : "null") + ", ");
+        (_nbTraining != null ? _nbTraining!.toString() : "null") +
+        ", ");
     buffer.write("size=" + (_size != null ? _size!.toString() : "null") + ", ");
     buffer.write(
         "price=" + (_price != null ? _price!.toString() : "null") + ", ");
@@ -144,7 +156,14 @@ class Plan {
   }
 
   Plan copyWith(
-      {String? id, PLAN_TYPE? name, int? limit, int? nbTraining, int? size, double? price, CURRENCY? currency, int? duration}) {
+      {String? id,
+      PLAN_TYPE? name,
+      int? limit,
+      int? nbTraining,
+      int? size,
+      double? price,
+      CURRENCY? currency,
+      int? duration}) {
     return Plan._internal(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -156,16 +175,15 @@ class Plan {
         duration: duration ?? this.duration);
   }
 
-  Plan copyWithModelFieldValues({
-    ModelFieldValue<String>? id,
-    ModelFieldValue<PLAN_TYPE>? name,
-    ModelFieldValue<int?>? limit,
-    ModelFieldValue<int?>? nbTraining,
-    ModelFieldValue<int?>? size,
-    ModelFieldValue<double?>? price,
-    ModelFieldValue<CURRENCY?>? currency,
-    ModelFieldValue<int?>? duration
-  }) {
+  Plan copyWithModelFieldValues(
+      {ModelFieldValue<String>? id,
+      ModelFieldValue<PLAN_TYPE>? name,
+      ModelFieldValue<int?>? limit,
+      ModelFieldValue<int?>? nbTraining,
+      ModelFieldValue<int?>? size,
+      ModelFieldValue<double?>? price,
+      ModelFieldValue<CURRENCY?>? currency,
+      ModelFieldValue<int?>? duration}) {
     return Plan._internal(
         id: id == null ? this.id : id.value,
         name: name == null ? this.name : name.value,
@@ -174,8 +192,7 @@ class Plan {
         size: size == null ? this.size : size.value,
         price: price == null ? this.price : price.value,
         currency: currency == null ? this.currency : currency.value,
-        duration: duration == null ? this.duration : duration.value
-    );
+        duration: duration == null ? this.duration : duration.value);
   }
 
   Plan.fromJson(Map<String, dynamic> json)
@@ -190,8 +207,7 @@ class Plan {
             json['currency'], CURRENCY.values),
         _duration = (json['duration'] as num?)?.toInt();
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'name': amplify_core.enumToString(_name),
         'limit': _limit,
@@ -202,8 +218,7 @@ class Plan {
         'duration': _duration
       };
 
-  Map<String, Object?> toMap() =>
-      {
+  Map<String, Object?> toMap() => {
         'id': id,
         'name': _name,
         'limit': _limit,
@@ -216,71 +231,63 @@ class Plan {
 
   static var schema = amplify_core.Model.defineSchema(
       define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-        modelSchemaDefinition.name = "Plan";
-        modelSchemaDefinition.pluralName = "Plans";
+    modelSchemaDefinition.name = "Plan";
+    modelSchemaDefinition.pluralName = "Plans";
 
-        modelSchemaDefinition.addField(
-            amplify_core.ModelFieldDefinition.customTypeField(
-                fieldName: 'id',
-                isRequired: true,
-                ofType: amplify_core.ModelFieldType(
-                    amplify_core.ModelFieldTypeEnum.string)
-            ));
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.customTypeField(
+            fieldName: 'id',
+            isRequired: true,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.string)));
 
-        modelSchemaDefinition.addField(
-            amplify_core.ModelFieldDefinition.customTypeField(
-                fieldName: 'name',
-                isRequired: true,
-                ofType: amplify_core.ModelFieldType(
-                    amplify_core.ModelFieldTypeEnum.enumeration)
-            ));
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.customTypeField(
+            fieldName: 'name',
+            isRequired: true,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.enumeration)));
 
-        modelSchemaDefinition.addField(
-            amplify_core.ModelFieldDefinition.customTypeField(
-                fieldName: 'limit',
-                isRequired: false,
-                ofType: amplify_core.ModelFieldType(
-                    amplify_core.ModelFieldTypeEnum.int)
-            ));
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.customTypeField(
+            fieldName: 'limit',
+            isRequired: false,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.int)));
 
-        modelSchemaDefinition.addField(
-            amplify_core.ModelFieldDefinition.customTypeField(
-                fieldName: 'nbTraining',
-                isRequired: false,
-                ofType: amplify_core.ModelFieldType(
-                    amplify_core.ModelFieldTypeEnum.int)
-            ));
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.customTypeField(
+            fieldName: 'nbTraining',
+            isRequired: false,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.int)));
 
-        modelSchemaDefinition.addField(
-            amplify_core.ModelFieldDefinition.customTypeField(
-                fieldName: 'size',
-                isRequired: false,
-                ofType: amplify_core.ModelFieldType(
-                    amplify_core.ModelFieldTypeEnum.int)
-            ));
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.customTypeField(
+            fieldName: 'size',
+            isRequired: false,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.int)));
 
-        modelSchemaDefinition.addField(
-            amplify_core.ModelFieldDefinition.customTypeField(
-                fieldName: 'price',
-                isRequired: false,
-                ofType: amplify_core.ModelFieldType(
-                    amplify_core.ModelFieldTypeEnum.double)
-            ));
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.customTypeField(
+            fieldName: 'price',
+            isRequired: false,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.double)));
 
-        modelSchemaDefinition.addField(
-            amplify_core.ModelFieldDefinition.customTypeField(
-                fieldName: 'currency',
-                isRequired: false,
-                ofType: amplify_core.ModelFieldType(
-                    amplify_core.ModelFieldTypeEnum.enumeration)
-            ));
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.customTypeField(
+            fieldName: 'currency',
+            isRequired: false,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.enumeration)));
 
-        modelSchemaDefinition.addField(
-            amplify_core.ModelFieldDefinition.customTypeField(
-                fieldName: 'duration',
-                isRequired: false,
-                ofType: amplify_core.ModelFieldType(
-                    amplify_core.ModelFieldTypeEnum.int)
-            ));
-      });
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.customTypeField(
+            fieldName: 'duration',
+            isRequired: false,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.int)));
+  });
 }

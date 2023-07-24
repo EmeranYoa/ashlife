@@ -38,6 +38,7 @@ class User extends amplify_core.Model {
   final Image? _avatar;
   final List<UserModel>? _models;
   final String? _datasetId;
+  final String? _model;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -94,6 +95,10 @@ class User extends amplify_core.Model {
     return _datasetId;
   }
   
+  String? get model {
+    return _model;
+  }
+  
   amplify_core.TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -102,9 +107,9 @@ class User extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const User._internal({required this.id, phone, name, email, generations, plans, images, favorites, avatar, models, datasetId, createdAt, updatedAt}): _phone = phone, _name = name, _email = email, _generations = generations, _plans = plans, _images = images, _favorites = favorites, _avatar = avatar, _models = models, _datasetId = datasetId, _createdAt = createdAt, _updatedAt = updatedAt;
+  const User._internal({required this.id, phone, name, email, generations, plans, images, favorites, avatar, models, datasetId, model, createdAt, updatedAt}): _phone = phone, _name = name, _email = email, _generations = generations, _plans = plans, _images = images, _favorites = favorites, _avatar = avatar, _models = models, _datasetId = datasetId, _model = model, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory User({String? id, String? phone, String? name, String? email, List<Generation>? generations, List<SubscriptionPlan>? plans, List<Image>? images, List<Image>? favorites, Image? avatar, List<UserModel>? models, String? datasetId}) {
+  factory User({String? id, String? phone, String? name, String? email, List<Generation>? generations, List<SubscriptionPlan>? plans, List<Image>? images, List<Image>? favorites, Image? avatar, List<UserModel>? models, String? datasetId, String? model}) {
     return User._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       phone: phone,
@@ -116,7 +121,8 @@ class User extends amplify_core.Model {
       favorites: favorites != null ? List<Image>.unmodifiable(favorites) : favorites,
       avatar: avatar,
       models: models != null ? List<UserModel>.unmodifiable(models) : models,
-      datasetId: datasetId);
+      datasetId: datasetId,
+      model: model);
   }
   
   bool equals(Object other) {
@@ -137,7 +143,8 @@ class User extends amplify_core.Model {
       DeepCollectionEquality().equals(_favorites, other._favorites) &&
       _avatar == other._avatar &&
       DeepCollectionEquality().equals(_models, other._models) &&
-      _datasetId == other._datasetId;
+      _datasetId == other._datasetId &&
+      _model == other._model;
   }
   
   @override
@@ -157,6 +164,7 @@ class User extends amplify_core.Model {
     buffer.write("avatar=" + (_avatar != null ? _avatar!.toString() : "null") + ", ");
     buffer.write("models=" + (_models != null ? _models!.toString() : "null") + ", ");
     buffer.write("datasetId=" + "$_datasetId" + ", ");
+    buffer.write("model=" + "$_model" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -164,7 +172,7 @@ class User extends amplify_core.Model {
     return buffer.toString();
   }
   
-  User copyWith({String? phone, String? name, String? email, List<Generation>? generations, List<SubscriptionPlan>? plans, List<Image>? images, List<Image>? favorites, Image? avatar, List<UserModel>? models, String? datasetId}) {
+  User copyWith({String? phone, String? name, String? email, List<Generation>? generations, List<SubscriptionPlan>? plans, List<Image>? images, List<Image>? favorites, Image? avatar, List<UserModel>? models, String? datasetId, String? model}) {
     return User._internal(
       id: id,
       phone: phone ?? this.phone,
@@ -176,7 +184,8 @@ class User extends amplify_core.Model {
       favorites: favorites ?? this.favorites,
       avatar: avatar ?? this.avatar,
       models: models ?? this.models,
-      datasetId: datasetId ?? this.datasetId);
+      datasetId: datasetId ?? this.datasetId,
+      model: model ?? this.model);
   }
   
   User copyWithModelFieldValues({
@@ -189,7 +198,8 @@ class User extends amplify_core.Model {
     ModelFieldValue<List<Image>?>? favorites,
     ModelFieldValue<Image?>? avatar,
     ModelFieldValue<List<UserModel>?>? models,
-    ModelFieldValue<String?>? datasetId
+    ModelFieldValue<String?>? datasetId,
+    ModelFieldValue<String?>? model
   }) {
     return User._internal(
       id: id,
@@ -202,7 +212,8 @@ class User extends amplify_core.Model {
       favorites: favorites == null ? this.favorites : favorites.value,
       avatar: avatar == null ? this.avatar : avatar.value,
       models: models == null ? this.models : models.value,
-      datasetId: datasetId == null ? this.datasetId : datasetId.value
+      datasetId: datasetId == null ? this.datasetId : datasetId.value,
+      model: model == null ? this.model : model.value
     );
   }
   
@@ -245,11 +256,12 @@ class User extends amplify_core.Model {
           .toList()
         : null,
       _datasetId = json['datasetId'],
+      _model = json['model'],
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'phone': _phone, 'name': _name, 'email': _email, 'generations': _generations?.map((Generation? e) => e?.toJson()).toList(), 'plans': _plans?.map((SubscriptionPlan? e) => e?.toJson()).toList(), 'images': _images?.map((Image? e) => e?.toJson()).toList(), 'favorites': _favorites?.map((Image? e) => e?.toJson()).toList(), 'avatar': _avatar?.toJson(), 'models': _models?.map((UserModel? e) => e?.toJson()).toList(), 'datasetId': _datasetId, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'phone': _phone, 'name': _name, 'email': _email, 'generations': _generations?.map((Generation? e) => e?.toJson()).toList(), 'plans': _plans?.map((SubscriptionPlan? e) => e?.toJson()).toList(), 'images': _images?.map((Image? e) => e?.toJson()).toList(), 'favorites': _favorites?.map((Image? e) => e?.toJson()).toList(), 'avatar': _avatar?.toJson(), 'models': _models?.map((UserModel? e) => e?.toJson()).toList(), 'datasetId': _datasetId, 'model': _model, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
@@ -264,6 +276,7 @@ class User extends amplify_core.Model {
     'avatar': _avatar,
     'models': _models,
     'datasetId': _datasetId,
+    'model': _model,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
@@ -284,6 +297,7 @@ class User extends amplify_core.Model {
   static final AVATAR = amplify_core.QueryField(fieldName: "avatar");
   static final MODELS = amplify_core.QueryField(fieldName: "models");
   static final DATASETID = amplify_core.QueryField(fieldName: "datasetId");
+  static final MODEL = amplify_core.QueryField(fieldName: "model");
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "User";
     modelSchemaDefinition.pluralName = "Users";
@@ -365,6 +379,12 @@ class User extends amplify_core.Model {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: User.DATASETID,
+      isRequired: false,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: User.MODEL,
       isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
