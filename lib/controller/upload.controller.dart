@@ -10,6 +10,7 @@ import 'package:ashlife/services/auth.service.dart';
 import 'package:ashlife/services/aws.s3.service.dart';
 import 'package:ashlife/services/cache.service.dart';
 import 'package:ashlife/services/subscription.service.dart';
+import 'package:ashlife/services/http.service.dart';
 import 'package:ashlife/widgets/Recommended.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,6 +32,7 @@ class UploadController extends GetxController {
   final CacheService cache = Get.put(CacheService());
   final SubscriptionService _subscriptionService = SubscriptionService();
   final AuthService authService = Get.put(AuthService());
+  final HttpService httpService = Get.put(HttpService());
 
   @override
   void onInit() {
@@ -65,7 +67,9 @@ class UploadController extends GetxController {
         for (Image image in user.images!) {
           Map<dynamic, dynamic> keyUrl = cachedImageUrls
               .map((url) => jsonDecode(url))
-              .firstWhere((map) => map.containsValue(image.path), //Retourne le 1er élément contient imgpath
+              .firstWhere(
+                  (map) => map.containsValue(
+                      image.path), //Retourne le 1er élément contient imgpath
                   orElse: () => {});
 
           if (keyUrl.isNotEmpty) {
@@ -142,13 +146,32 @@ class UploadController extends GetxController {
 
       for (File file in files) {
         final ext = _awsS3.getExtension(file: file);
-        final key = "${uuid.v4()}.$ext";
-        final uploadKey = await _awsS3.uploadFile(local: file, key: key);
-        keyList.add(uploadKey!);
+        final phoneNumber = (await authService.getCurrentUser())?.username;
+        final user = (await Amplify.DataStore.query(
+          User.classType,
+          where: User.PHONE.eq(phoneNumber),
+        ))
+            .first;
+
+        final datasetId = user.datasetId;
+        final signUrlObject = await httpService
+            .post('datasets/$datasetId/upload', {"extension": ext});
+
+        final uploadFileObject = await httpService.postFile(
+            signUrlObject['uploadDatasetImage']['url'],
+            file,
+            {...jsonDecode(signUrlObject['uploadDatasetImage']['fields'])});
+        print("=" * 100);
+        print(uploadFileObject);
+        // final key = "${uuid.v4()}.$ext";
+        // final uploadKey = await _awsS3.uploadFile(local: file, key: key);
+        // keyList.add(uploadKey!);
       }
-      imageKeys.value = keyList;
+      // imageKeys.value = keyList;
     } on Exception catch (e) {
       isUploading.value = false;
+      print('=====================ERROR=========================');
+      print(e.toString());
       Get.snackbar('Error', e.toString());
     }
   }
@@ -176,7 +199,7 @@ class UploadController extends GetxController {
       safePrint(e.toString());
     }
   }
-  
+
   Future<void> _updateUserDataAddFile(List<String> keys) async {
     try {
       final phoneNumber = (await authService.getCurrentUser())?.username;

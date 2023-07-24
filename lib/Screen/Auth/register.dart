@@ -99,11 +99,10 @@ class _RegisterState extends State<Register> {
       final datasetId = dataSetResult["insert_datasets_one"]["id"];
 
       final user = User(
-        name: nameController.text,
-        phone: phoneNumberController.text,
-        email: emailController.text,
-        //dataSetId: ""
-      );
+          name: nameController.text,
+          phone: phoneNumberController.text,
+          email: emailController.text,
+          datasetId: datasetId);
       await Amplify.DataStore.save(user);
 
       setState(() {

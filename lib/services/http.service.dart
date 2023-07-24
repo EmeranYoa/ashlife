@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -52,6 +53,26 @@ class HttpService {
           body: jsonEncode({...?data}), headers: header);
 
       return jsonDecode(response.body);
+    } catch (e) {
+      return jsonDecode(
+          {'status': 'error', 'message': e.toString()}.toString());
+    }
+  }
+
+  Future<dynamic> postFile(String path, File file,
+      [Map<String, dynamic>? data]) async {
+    try {
+      final request = http.MultipartRequest('POST', Uri.parse(path));
+      request.fields.addAll({...?data});
+      request.files.add(await http.MultipartFile.fromPath('file', file.path));
+
+      // final response = await http.Response.fromStream(await request.send());
+      // if (response.statusCode == 200) {
+      //   return jsonDecode(response.body);
+      // } else {
+      //   return jsonDecode(
+      //       {'status': 'error', 'message': response.reasonPhrase}.toString());
+      // }
     } catch (e) {
       return jsonDecode(
           {'status': 'error', 'message': e.toString()}.toString());

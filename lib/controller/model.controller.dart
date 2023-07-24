@@ -35,8 +35,8 @@ class ModelController extends GetxController {
           continue;
         }
         File? file = await _cache.getImageFile(model['screenshots']!);
-        print('=' * 100);
-        print(model['screenshots']);
+        // print('=' * 100);
+        // print(model['screenshots']);
         fResponse.add({
           "model_id": model['model_id'],
           'status': model['status'],
