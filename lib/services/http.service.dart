@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:ashlife/models/ModelProvider.dart';
 import 'package:http/http.dart' as http;
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 
 class HttpService {
   String dreamboothApiKey =
@@ -28,26 +31,6 @@ class HttpService {
       "https://3d0zjl4cce.execute-api.us-east-1.amazonaws.com/dev/webhook";
 
   Future<dynamic> post(String path, [Map<String, dynamic>? data]) async {
-    // final options = RestOptions(
-    //   apiName: 'apicbb410f6',
-    //   path: path,
-    //   body: Uint8List.fromList(utf8.encode(jsonEncode(data)))
-    // );
-
-    // final operation = Amplify.API.post(
-    //     restOptions: options
-    // );
-    // final response = await operation.response;
-    //   print('='*100);
-    //   print(response.body);
-    // if (response.statusCode == 200) {
-    //   print('*******************************************===');
-    //   print(response.body);
-    //   return response.body;
-    // }
-    // print('*******************************************===');
-    // print(response.body);
-    // return null;
     try {
       final response = await http.post(Uri.parse(baseUrl + path),
           body: jsonEncode({...?data}), headers: header);
@@ -59,23 +42,34 @@ class HttpService {
     }
   }
 
-  Future<dynamic> postFile(String path, File file,
+  Future<dynamic> get(String path, [String? id]) async {
+    try {
+      final response = await http.get(Uri.parse("$baseUrl$path/$id"),
+          headers: header);
+
+      return jsonDecode(response.body);
+    } catch (e) {
+      return jsonDecode(
+          {'status': 'error', 'message': e.toString()}.toString());
+    }
+  }
+
+  Future<bool> postFile(String path, File file,
       [Map<String, dynamic>? data]) async {
     try {
       final request = http.MultipartRequest('POST', Uri.parse(path));
       request.fields.addAll({...?data});
-      request.files.add(await http.MultipartFile.fromPath('file', file.path));
+      request.files.add(await http.MultipartFile.fromPath('file', file.path,
+          contentType: MediaType.parse(lookupMimeType(file.path)!)));
 
-      // final response = await http.Response.fromStream(await request.send());
-      // if (response.statusCode == 200) {
-      //   return jsonDecode(response.body);
-      // } else {
-      //   return jsonDecode(
-      //       {'status': 'error', 'message': response.reasonPhrase}.toString());
-      // }
+      final response = await http.Response.fromStream(await request.send());
+
+      if (response.statusCode == 204) {
+        return true;
+      }
+      return false;
     } catch (e) {
-      return jsonDecode(
-          {'status': 'error', 'message': e.toString()}.toString());
+      return false;
     }
   }
 }

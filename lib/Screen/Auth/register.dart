@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:get/get.dart';
-import 'dart:convert';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -97,6 +96,7 @@ class _RegisterState extends State<Register> {
       final dataSetResult =
           await _httpService.post('datasets', {'name': nameController.text});
       final datasetId = dataSetResult["insert_datasets_one"]["id"];
+
 
       final user = User(
           name: nameController.text,

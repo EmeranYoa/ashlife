@@ -1,8 +1,11 @@
 import 'package:amplify_datastore/amplify_datastore.dart';
+import 'package:ashlife/Screen/Auth/register.dart';
 import 'package:ashlife/Screen/model_screen.dart';
 import 'package:ashlife/Screen/subscription_screen.dart';
 import 'package:ashlife/controller/model.controller.dart';
 import 'package:ashlife/controller/upload.controller.dart';
+import 'package:ashlife/controller/auth.controller.dart';
+import 'package:ashlife/models/User.dart';
 import 'package:ashlife/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +23,7 @@ class UploadScreen extends StatefulWidget {
 
 class _UploadScreenState extends State<UploadScreen> {
   UploadController controller = Get.put(UploadController());
+  ModelController _modelController = Get.put(ModelController());
 
   @override
   void initState() {
@@ -226,11 +230,11 @@ class _UploadScreenState extends State<UploadScreen> {
           child: Obx(() {
             if (controller.selectedImages.value.length >= 8) {
               return CustomButton(
-                  text: 'txt_create_m'.tr,
+                  text: "txt_create_m".tr, //'txt_create_m'.tr,
                   textColor: Colors.white,
                   color: const Color(0xff253890),
                   pressed: () {
-                    onCreateModelPress();
+                    _modelController.createModel;
                   },
                   isLoading: false);
             }
@@ -239,13 +243,14 @@ class _UploadScreenState extends State<UploadScreen> {
                 textColor: Colors.white,
                 color: const Color(0xff253890),
                 pressed: () {
-                  if (controller.images.length >= 20) {
-                    Get.snackbar('Error',
-                        "You have reached the maximum number of maximum files to upload");
-                    return;
-                  }
-                  Get.bottomSheet(
-                      BottomSheet(size: size, controller: controller));
+                  onCreateModelPress();
+                  // if (controller.images.length >= 20) {
+                  //   Get.snackbar('Error',
+                  //       "You have reached the maximum number of maximum files to upload");
+                  //   return;
+                  // }
+                  // Get.bottomSheet(
+                  //     BottomSheet(size: size, controller: controller));
                 },
                 isLoading: false);
           }),
@@ -326,45 +331,43 @@ class CreateModelBottomSheet extends StatefulWidget {
 }
 
 class _CreateModelBottomSheetState extends State<CreateModelBottomSheet> {
-  late TextEditingController _genderController;
-  late TextEditingController _promptController;
+  // late TextEditingController _genderController;
+  // late TextEditingController _promptController;
   late ModelController _modelController;
 
   @override
   void initState() {
-    _genderController = TextEditingController();
-    _promptController = TextEditingController();
+    // _genderController = TextEditingController();
+    // _promptController = TextEditingController();
     _modelController = Get.put(ModelController());
     super.initState();
   }
 
   @override
   void dispose() {
-    _genderController.dispose();
-    _promptController.dispose();
+    // _genderController.dispose();
+    // _promptController.dispose();
     _modelController.dispose();
     super.dispose();
   }
 
-  void startGeneration() {
-    if (_modelController.loading.value) {
-      return;
-    }
-    if (_genderController.text.isEmpty) {
-      _genderController.text = 'men';
-    }
+  Future<void> startGeneration() async {
+    // if (_modelController.loading.value) {
+    //   return;
+    // }
+    // if (_genderController.text.isEmpty) {
+    //   _genderController.text = 'men';
+    // }
 
-    if (_genderController.text.isEmpty | _promptController.text.isEmpty) {
-      Get.snackbar('Error', 'Please fill all data');
-      return;
-    }
+    // if (_genderController.text.isEmpty | _promptController.text.isEmpty) {
+    //   Get.snackbar('Error', 'Please fill all data');
+    //   return;
+    // }
 
-    _modelController.createModel(
-        Get.find<UploadController>().selectedImages.value,
-        _promptController.text,
-        _genderController.text);
+    _modelController.createModel();
   }
 
+  // Get.find<UploadController>().selectedImages.value,
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -438,7 +441,7 @@ class _CreateModelBottomSheetState extends State<CreateModelBottomSheet> {
                     ),
                     height: 50,
                     child: TextField(
-                      controller: _promptController,
+                      // controller: _promptController,
                       style: const TextStyle(color: Colors.black87),
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -458,34 +461,34 @@ class _CreateModelBottomSheetState extends State<CreateModelBottomSheet> {
               ),
               Row(
                 children: [
-                  LiteRollingSwitch(
-                    value: true,
-                    textOn: 'txt_male'.tr,
-                    textOff: 'txt_female'.tr,
-                    colorOn: const Color(0xff253890),
-                    textOffColor: Colors.white,
-                    textOnColor: Colors.white,
-                    colorOff: const Color(0xff050B29),
-                    iconOn: Icons.male,
-                    iconOff: Icons.female,
-                    textSize: 16.0,
-                    onChanged: (bool state) {
-                      if (state) {
-                        _genderController.text = "men";
-                      } else {
-                        _genderController.text = "female";
-                      }
-                    },
-                    onDoubleTap: () {
-                      //log here
-                    },
-                    onTap: () {
-                      //log here
-                    },
-                    onSwipe: () {
-                      //log here
-                    },
-                  ),
+                  // LiteRollingSwitch(
+                  //   value: true,
+                  //   textOn: 'txt_male'.tr,
+                  //   textOff: 'txt_female'.tr,
+                  //   colorOn: const Color(0xff253890),
+                  //   textOffColor: Colors.white,
+                  //   textOnColor: Colors.white,
+                  //   colorOff: const Color(0xff050B29),
+                  //   iconOn: Icons.male,
+                  //   iconOff: Icons.female,
+                  //   textSize: 16.0,
+                  //   // onChanged: (bool state) {
+                  //   //   if (state) {
+                  //   //     _genderController.text = "men";
+                  //   //   } else {
+                  //   //     _genderController.text = "female";
+                  //   //   }
+                  //   // },
+                  //   onDoubleTap: () {
+                  //     //log here
+                  //   },
+                  //   onTap: () {
+                  //     //log here
+                  //   },
+                  //   onSwipe: () {
+                  //     //log here
+                  //   },
+                  // ),
                 ],
               ),
               const SizedBox(

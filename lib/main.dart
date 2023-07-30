@@ -121,7 +121,6 @@ void callbackDispatcher() {
                       status: response['model_training_status'],
                       image: imageInstance);
                 }
-
                 return element;
               }).toList();
             }
@@ -145,13 +144,13 @@ void callbackDispatcher() {
       }
     }
 
-    if (taskName == 'checkModelRelaod') {
+    if (taskName == 'checkModelGenerated') {
       try {
         HttpService httpService = HttpService();
         String modelId = inputData!['modelId'];
+        String generationlId = inputData!['generationlId'];
 
-        final checkModelResponse = await httpService
-            .post(httpService.dreamboothGetModelStatus + modelId);
+        final checkModelResponse = await httpService.get('models', generationlId);
 
         if (checkModelResponse['model_training_status'] == "model_ready") {
           Notify().showNotification(
@@ -168,7 +167,7 @@ void callbackDispatcher() {
       }
     }
 
-    if (taskName == 'checkGenerationResult') {
+    if (taskName == 'checkImagesGenerated') {
       try {
         HttpService httpService = HttpService();
         String generationId = inputData!['generationId'];

@@ -156,12 +156,13 @@ class UploadController extends GetxController {
         final datasetId = user.datasetId;
         final signUrlObject = await httpService
             .post('datasets/$datasetId/upload', {"extension": ext});
-
+        print("**===" * 10);
+        print(signUrlObject);
         final uploadFileObject = await httpService.postFile(
             signUrlObject['uploadDatasetImage']['url'],
             file,
             {...jsonDecode(signUrlObject['uploadDatasetImage']['fields'])});
-        print("=" * 100);
+        print("=**===" * 10);
         print(uploadFileObject);
         // final key = "${uuid.v4()}.$ext";
         // final uploadKey = await _awsS3.uploadFile(local: file, key: key);
