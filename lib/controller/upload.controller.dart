@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:ashlife/Screen/model_screen.dart';
 import 'package:ashlife/Screen/subscription_screen.dart';
@@ -53,11 +54,10 @@ class UploadController extends GetxController {
     try {
       loading.value = true;
       final phoneNumber = (await authService.getCurrentUser())?.username;
-      final user = (await Amplify.DataStore.query(
-        User.classType,
-        where: User.PHONE.eq(phoneNumber),
-      ))
-          .first;
+      var request =
+          ModelQueries.list(User.classType, where: User.PHONE.eq(phoneNumber));
+      final result = await Amplify.API.query(request: request).response;
+      final user = result.data?.items.first as User;
 
       List<String> cachedImageUrls = await cache.getCachedImageUrls();
 
@@ -147,11 +147,9 @@ class UploadController extends GetxController {
       for (File file in files) {
         final ext = _awsS3.getExtension(file: file);
         final phoneNumber = (await authService.getCurrentUser())?.username;
-        final user = (await Amplify.DataStore.query(
-          User.classType,
-          where: User.PHONE.eq(phoneNumber),
-        ))
-            .first;
+        var request = ModelQueries.list(User.classType, where: User.PHONE.eq(phoneNumber));
+        final result = await Amplify.API.query(request: request).response;
+        final user = result.data?.items.first as User;
 
         final datasetId = user.datasetId;
         final signUrlObject = await httpService
@@ -180,11 +178,9 @@ class UploadController extends GetxController {
   Future<void> _updateUserData(List<String> keys) async {
     try {
       final phoneNumber = (await authService.getCurrentUser())?.username;
-      final user = (await Amplify.DataStore.query(
-        User.classType,
-        where: User.PHONE.eq(phoneNumber),
-      ))
-          .first;
+      var request = ModelQueries.list(User.classType, where: User.PHONE.eq(phoneNumber));
+      final result = await Amplify.API.query(request: request).response;
+      final user = result.data?.items.first as User;
       List<Image> userImages = [];
 
       for (String key in keys) {
@@ -192,7 +188,8 @@ class UploadController extends GetxController {
       }
       final newUserData = user.copyWith(images: userImages);
 
-      await Amplify.DataStore.save(newUserData);
+      final req = ModelMutations.update(newUserData);
+      await Amplify.API.mutate(request: req);
       getInitialData();
       isUploading.value = false;
     } on Exception catch (e) {
@@ -204,11 +201,9 @@ class UploadController extends GetxController {
   Future<void> _updateUserDataAddFile(List<String> keys) async {
     try {
       final phoneNumber = (await authService.getCurrentUser())?.username;
-      final user = (await Amplify.DataStore.query(
-        User.classType,
-        where: User.PHONE.eq(phoneNumber),
-      ))
-          .first;
+      var request = ModelQueries.list(User.classType, where: User.PHONE.eq(phoneNumber));
+      final result = await Amplify.API.query(request: request).response;
+      final user = result.data?.items.first as User;
       List<Image> userImages = user.images ?? [];
 
       for (String key in keys) {
@@ -216,7 +211,8 @@ class UploadController extends GetxController {
       }
       final newUserData = user.copyWith(images: userImages);
 
-      await Amplify.DataStore.save(newUserData);
+      final req = ModelMutations.update(newUserData);
+      await Amplify.API.mutate(request: req);
       getInitialData();
       isUploading.value = false;
     } on Exception catch (e) {

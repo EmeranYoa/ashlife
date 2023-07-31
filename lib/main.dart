@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:ashlife/amplifyconfiguration.dart';
@@ -24,7 +23,7 @@ Future<void> main() async {
   await _configureAmplify();
   await GetStorage.init();
   Notify().initNotification();
-  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+  // Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
   runApp(const MyApp());
 }
 
@@ -53,16 +52,12 @@ class MyApp extends StatelessWidget {
 Future<void> _configureAmplify() async {
   final authPlugin = AmplifyAuthCognito();
   final apiPlugin = AmplifyAPI(modelProvider: ModelProvider.instance);
-  final dataStorePlugin =
-      AmplifyDataStore(modelProvider: ModelProvider.instance);
   final storagePlugin = AmplifyStorageS3();
 
-  await Amplify.addPlugins(
-      [dataStorePlugin, authPlugin, apiPlugin, storagePlugin]);
+  await Amplify.addPlugins([authPlugin, apiPlugin, storagePlugin]);
 
   try {
     await Amplify.configure(amplifyconfig);
-    await Amplify.DataStore.clear();
   } on AmplifyAlreadyConfiguredException {
     safePrint(
         "Tried to reconfigure Amplify; this can occur when your app restarts on Android.");
@@ -88,121 +83,123 @@ Locale getLocale() {
   return const Locale('en', 'US');
 }
 
-void callbackDispatcher() {
-  Workmanager().executeTask((taskName, inputData) async {
-    if (taskName == 'checkTraining') {
-      try {
-        HttpService httpService = HttpService();
-        final SubscriptionService subscriptionService = SubscriptionService();
-        await _configureAmplify();
-        String id = inputData!['id'];
-        String userId = inputData!['userId'];
+// void callbackDispatcher() {
+//   Workmanager().executeTask((taskName, inputData) async {
+//     if (taskName == 'checkTraining') {
+//       try {
+//         HttpService httpService = HttpService();
+//         final SubscriptionService subscriptionService = SubscriptionService();
+//         await _configureAmplify();
+//         String id = inputData!['id'];
+//         String userId = inputData!['userId'];
 
-        final u = (await Amplify.DataStore.query(User.classType,
-                where: User.PHONE.eq(userId)))
-            .first;
+//         final req = ModelQueries.get(User.classType, id)
+//         final u = (await Amplify.API.query(User.classType,
+//                 where: User.PHONE.eq(userId)))
+//             .first;
 
-        List<UserModel>? uM = u!.models;
+//         List<UserModel>? uM = u!.models;
 
-        UserModel userModel =
-            uM!.where((element) => element.modelId == id).first;
+//         UserModel userModel =
+//             uM!.where((element) => element.modelId == id).first;
 
-        if (userModel.status != "model_ready") {
-          final response = await httpService.post(
-              "https://stablediffusionapi.com/api/v3/fine_tune_status/$id");
+//         if (userModel.status != "model_ready") {
+//           final response = await httpService.post(
+//               "https://stablediffusionapi.com/api/v3/fine_tune_status/$id");
 
-          if (response['model_training_status'] == 'model_ready') {
-            if (uM != null) {
-              uM = uM.map((element) {
-                if (element.modelId == id) {
-                  final imageInstance =
-                      ModelImage.Image(path: response['test_image']);
-                  return element.copyWith(
-                      status: response['model_training_status'],
-                      image: imageInstance);
-                }
-                return element;
-              }).toList();
-            }
+//           if (response['model_training_status'] == 'model_ready') {
+//             if (uM != null) {
+//               uM = uM.map((element) {
+//                 if (element.modelId == id) {
+//                   final imageInstance =
+//                       ModelImage.Image(path: response['test_image']);
+//                   return element.copyWith(
+//                       status: response['model_training_status'],
+//                       image: imageInstance);
+//                 }
+//                 return element;
+//               }).toList();
+//             }
 
-            final newUser = u.copyWith(models: uM);
-            await Amplify.DataStore.save(newUser);
+//             final newUser = u.copyWith(models: uM);
+//             await Amplify.DataStore.save(newUser);
 
-            subscriptionService.updateSubscription(ACTION_TYPE.GENERATION);
-            Notify().showNotification(
-                title: 'Model generation',
-                body: 'Your model has been generated successfully',
-                payLoad: '/main');
-            return Future.value(true);
-          }
+//             subscriptionService.updateSubscription(ACTION_TYPE.GENERATION);
+//             Notify().showNotification(
+//                 title: 'Model generation',
+//                 body: 'Your model has been generated successfully',
+//                 payLoad: '/main');
+//             return Future.value(true);
+//           }
 
-          return Future.value(false);
-        }
-        return Future.value(true);
-      } on ApiException catch (e) {
-        return Future.value(false);
-      }
-    }
+//           return Future.value(false);
+//         }
+//         return Future.value(true);
+//       } on ApiException catch (e) {
+//         return Future.value(false);
+//       }
+//     }
 
-    if (taskName == 'checkModelGenerated') {
-      try {
-        HttpService httpService = HttpService();
-        String modelId = inputData!['modelId'];
-        String generationlId = inputData!['generationlId'];
+//     if (taskName == 'checkModelGenerated') {
+//       try {
+//         HttpService httpService = HttpService();
+//         String modelId = inputData!['modelId'];
+//         String generationlId = inputData!['generationlId'];
 
-        final checkModelResponse = await httpService.get('models', generationlId);
+//         final checkModelResponse =
+//             await httpService.get('models', generationlId);
 
-        if (checkModelResponse['model_training_status'] == "model_ready") {
-          Notify().showNotification(
-              title: 'Model Loaded',
-              body:
-                  'Your model has been loaded successfully, you can use it now!',
-              payLoad: '/main');
+//         if (checkModelResponse['model_training_status'] == "model_ready") {
+//           Notify().showNotification(
+//               title: 'Model Loaded',
+//               body:
+//                   'Your model has been loaded successfully, you can use it now!',
+//               payLoad: '/main');
 
-          return Future.value(true);
-        }
-        return Future.value(false);
-      } on Exception catch (e) {
-        return Future.value(false);
-      }
-    }
+//           return Future.value(true);
+//         }
+//         return Future.value(false);
+//       } on Exception catch (e) {
+//         return Future.value(false);
+//       }
+//     }
 
-    if (taskName == 'checkImagesGenerated') {
-      try {
-        HttpService httpService = HttpService();
-        String generationId = inputData!['generationId'];
+//     if (taskName == 'checkImagesGenerated') {
+//       try {
+//         HttpService httpService = HttpService();
+//         String generationId = inputData!['generationId'];
 
-        final checkGenerationResponse = await httpService
-            .post(httpService.dreamboothCheckGenerationResult + generationId);
+//         final checkGenerationResponse = await httpService
+//             .post(httpService.dreamboothCheckGenerationResult + generationId);
 
-        if (checkGenerationResponse['status'] == "success") {
-          Notify().showNotification(
-            title: 'Generation finish',
-            body: 'We are finish to generate your image',
-            payLoad: jsonEncode(checkGenerationResponse),
-          );
+//         if (checkGenerationResponse['status'] == "success") {
+//           Notify().showNotification(
+//             title: 'Generation finish',
+//             body: 'We are finish to generate your image',
+//             payLoad: jsonEncode(checkGenerationResponse),
+//           );
 
-          return Future.value(true);
-        }
+//           return Future.value(true);
+//         }
 
-        if (checkGenerationResponse['status'] == "failed") {
-          Notify().showNotification(
-            title: 'Generation Error',
-            body:
-                'We encountered an error while generating your images, try again later',
-            payLoad: jsonEncode(checkGenerationResponse),
-          );
+//         if (checkGenerationResponse['status'] == "failed") {
+//           Notify().showNotification(
+//             title: 'Generation Error',
+//             body:
+//                 'We encountered an error while generating your images, try again later',
+//             payLoad: jsonEncode(checkGenerationResponse),
+//           );
 
-          return Future.value(true);
-        }
-        print('*=' * 100);
-        print('Proccesing');
-        return Future.value(false);
-      } on Exception catch (e) {
-        return Future.value(false);
-      }
-    }
+//           return Future.value(true);
+//         }
+//         print('*=' * 100);
+//         print('Proccesing');
+//         return Future.value(false);
+//       } on Exception catch (e) {
+//         return Future.value(false);
+//       }
+//     }
 
-    return Future.value(false);
-  });
-}
+//     return Future.value(false);
+//   });
+// }

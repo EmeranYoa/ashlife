@@ -1,3 +1,4 @@
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:ashlife/Screen/Auth/phoneverif.dart';
@@ -103,7 +104,9 @@ class _RegisterState extends State<Register> {
           phone: phoneNumberController.text,
           email: emailController.text,
           datasetId: datasetId);
-      await Amplify.DataStore.save(user);
+
+      final request = ModelMutations.update(user);
+      await Amplify.API.mutate(request:request);
 
       setState(() {
         isLoadingSignup = false;

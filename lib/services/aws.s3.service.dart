@@ -4,7 +4,6 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:get/get.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_core/amplify_core.dart';
-import 'package:amplify_datastore/amplify_datastore.dart';
 
 class AwsS3 extends GetxService {
   Future<String?> uploadFile(

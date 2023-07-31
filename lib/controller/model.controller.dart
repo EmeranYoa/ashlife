@@ -1,15 +1,34 @@
 import 'dart:io';
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:ashlife/models/ModelProvider.dart';
 import 'package:ashlife/services/auth.service.dart';
 import 'package:ashlife/services/aws.s3.service.dart';
 import 'package:ashlife/services/cache.service.dart';
+import 'package:ashlife/screen/image_screen.dart';
 import 'package:ashlife/services/http.service.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+class ResponseImageItem {
+  final String url;
+  final bool nsfw;
+  final String id;
+  final int likeCount;
+  var generated_image_variation_generics;
+
+  ResponseImageItem(
+      {required this.url,
+      this.nsfw = false,
+      required this.id,
+      required this.likeCount,
+      this.generated_image_variation_generics});
+}
 
 class ModelController extends GetxController {
   RxList<dynamic> baseModels = [].obs;
@@ -61,9 +80,10 @@ class ModelController extends GetxController {
       myModelLoading.value = true;
       final user = await _authService.getCurrentUser();
       if (user != null) {
-        final u = (await Amplify.DataStore.query(User.classType,
-                where: User.PHONE.eq(user.username)))
-            .first;
+        final request = ModelQueries.list(User.classType,
+            where: User.PHONE.eq(user.username));
+        final result = await Amplify.API.query(request: request).response;
+        final u = result.data?.items.first as User;
 
         List<Map<String, dynamic>> fResponse = [];
         final uM = u.models!;
@@ -92,9 +112,10 @@ class ModelController extends GetxController {
     try {
       final user = await _authService.getCurrentUser();
       if (user != null) {
-        final u = (await Amplify.DataStore.query(User.classType,
-                where: User.PHONE.eq(user.username)))
-            .first;
+        var request = ModelQueries.list(User.classType,
+            where: User.PHONE.eq(user.username));
+        final result = await Amplify.API.query(request: request).response;
+        final u = result.data?.items.first;
 
         print(u);
         // "${user.name}_${user.id}",
@@ -116,13 +137,14 @@ class ModelController extends GetxController {
         print(response);
 
         if (response.isNotEmpty) {
-          final newUserData = u.copyWith(modelObject: jsonEncode(response));
+          final newUserData = u?.copyWith(modelObject: jsonEncode(response));
 
-          await Amplify.DataStore.save(newUserData);
+          var request = ModelMutations.update(newUserData!);
+
+          await Amplify.API.mutate(request: request);
 
           final String modelId = response['sdTrainingJob']['customModelId'];
-          const String prompt =
-              "Portrait of a very beautiful young woman in front of flower of life mandala wearing a huge elaborate detailed ornate crown made of all types of colorful flowers, turban of flowers, Visionary art, Cinematic lighting, Portrait, headshot, in style (ARTIST NAME) and baroque styles, symmetrical, hyper realistic,8k image, 3D, supersharp, pearls and oyesters, turban of vibrant flowers, satin ribbons, pearls and chains, perfect symmetry, iridescent, High Definition, Octane render in Maya and Houdini, light,shadows, reflections, photorealistic, masterpiece, smooth gradients, no blur, sharp focus,photorealistic, insanely detailed and intricate, cinematic lighting, real photography, epic scene, 8K";
+          const String prompt = "woman with cornrows";
 
           await generateImages(modelId: modelId, prompt: prompt);
           // final user = await _authService.getCurrentUser();
@@ -133,7 +155,7 @@ class ModelController extends GetxController {
           //       name: prompt,
           //       prompt: prompt,
           //       status: 'processing');
-          //   User u = (await Amplify.DataStore.query(User.classType,
+          //   User u = (await Amplify.API.query(User.classType,
           //           where: User.PHONE.eq(user.username)))
           //       .first;
 
@@ -145,7 +167,7 @@ class ModelController extends GetxController {
           //   }
           //   final newUser = u.copyWith(models: uModels);
 
-          //   await Amplify.DataStore.save(newUser);
+          //   await Amplify.API.save(newUser);
           // }
 
           // Workmanager().registerPeriodicTask(
@@ -166,6 +188,11 @@ class ModelController extends GetxController {
     } on Exception catch (e) {
       loading.value = false;
     }
+    Get.to(
+      const ImageScreen(),
+      duration: const Duration(milliseconds: 800),
+      transition: Transition.fade,
+    );
   }
 
   Future<void> generateImages(
@@ -173,28 +200,48 @@ class ModelController extends GetxController {
       required String prompt,
       String negativePrompt = "",
       int numImages = 4}) async {
+    print("start");
+
     final response = await _httpService.post('generations', {
       "prompt": prompt,
-      "modelId": modelId,
+      "modelId": "48c07a22-fa65-4143-a7af-f2ea85a0ecaa",
       "num_images": numImages,
       "negative_prompt": negativePrompt
     });
 
+    print("end");
+    print(response);
+
     //utilisateur courant
     final user = await _authService.getCurrentUser();
     if (user != null) {
-      final u = (await Amplify.DataStore.query(User.classType,
-              where: User.PHONE.eq(user.username)))
-          .first;
+      var request = ModelQueries.list(User.classType,
+          where: User.PHONE.eq(user.username));
+      final result = await Amplify.API.query(request: request).response;
+      final u = result.data?.items.first as User;
 
-      print("==================Response to image generation==================");          
-      print(response);
+      await Future.delayed(const Duration(seconds: 12), () async {
+        final String generationId = response['sdGenerationJob']['generationId'];
 
-      final String generationlId = response['sdGenerationJob']['generationId'];
-      final imageGenerated =
-          await _httpService.get('generations', generationlId);
-      print("==============Response to image generation=====================");
-      print(imageGenerated);
+        final imageGenerated =
+            await _httpService.get('generations', generationId);
+
+        print("============Response to image generation================");
+        print(imageGenerated);
+        final urls = imageGenerated['generations_by_pk']['generated_images'];
+
+        var items = <ResponseImageItem>[];
+
+        for (var element in urls) {
+          ResponseImageItem item = ResponseImageItem(
+              url: element["url"],
+              id: element["id"],
+              likeCount: element["likeCount"]);
+
+          items.add(item);
+        }
+        print(items);
+      });
 
       Workmanager().registerPeriodicTask(
         'checkModelGenerated',
@@ -204,12 +251,12 @@ class ModelController extends GetxController {
         inputData: {'id': response['modelId'], "userId": u.id},
         constraints: Constraints(networkType: NetworkType.connected),
       );
-        Workmanager().registerPeriodicTask(
+      Workmanager().registerPeriodicTask(
         'checkImagesGenerated',
         "checkImagesGenerated",
         frequency: const Duration(minutes: 1),
         initialDelay: const Duration(minutes: 1),
-        inputData: {'id': response['generationlId'], "userId": u.name},
+        inputData: {'id': response['generationId'], "userId": u.name},
         // inputData: {'id': response['training_id'], "userId": '+237691489490'},
         constraints: Constraints(networkType: NetworkType.connected),
       );

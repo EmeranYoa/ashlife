@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_api/model_queries.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:ashlife/models/Image.dart';
 import 'package:ashlife/models/User.dart';
@@ -8,6 +10,7 @@ import 'package:ashlife/services/auth.service.dart';
 import 'package:ashlife/services/aws.s3.service.dart';
 import 'package:ashlife/services/cache.service.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
@@ -43,21 +46,18 @@ class AuthController extends GetxController {
 
   Future<void> getCurrentUser() async {
     try {
-      print(selectedImages);
-      print('=' * 100);
       isLoading.value = true;
       bool isAuth = await checkAuthenticateUser();
 
       if (isAuth) {
         isLoading.value = false;
         final us = await authService.getCurrentUser();
-        final u = (await Amplify.DataStore.query(
-          User.classType,
-          where: User.PHONE.eq(us?.username),
-        ))
-            .first;
+        final request = ModelQueries.list(User.classType);
+        final u = await Amplify.API.query(request: request).response;
 
-        user.value = u;
+        user.value = u.data?.items
+            .where((element) => element?.phone == us?.username)
+            .first as User;
         await getUserAvatar();
       }
       isLoading.value = false;
@@ -83,15 +83,13 @@ class AuthController extends GetxController {
     try {
       isLoading.value = true;
       await authService.editUserInfo(name, email);
-      final userWithId = await Amplify.DataStore.query(
-        User.classType,
-        where: User.ID.eq(user.value.id),
-      );
+      var request = ModelQueries.get(User.classType, user.value.id);
+      final userWithId = await Amplify.API.query(request: request).response;
+      final oldUser = userWithId.data!;
 
-      final oldUser = userWithId.first;
       final newUser = oldUser.copyWith(name: name, email: email);
-
-      await Amplify.DataStore.save(newUser);
+      request = ModelMutations.update(newUser);
+      await Amplify.API.mutate(request: request);
       await getCurrentUser();
       isLoading.value = false;
     } catch (e) {
@@ -114,15 +112,15 @@ class AuthController extends GetxController {
           final uploadKey =
               await _awsS3.uploadFile(local: croppedFile, key: key);
 
-          final userWithId = await Amplify.DataStore.query(
-            User.classType,
-            where: User.ID.eq(user.value.id),
-          );
+          var request = ModelQueries.get(User.classType, user.value.id);
 
-          final oldUser = userWithId.first;
+          final userWithId = await Amplify.API.query(request: request).response;
+
+          final oldUser = userWithId.data!;
           final newUser = oldUser.copyWith(avatar: Image(path: uploadKey!));
 
-          await Amplify.DataStore.save(newUser);
+          request = ModelMutations.update(newUser);
+          await Amplify.API.mutate(request: request);
           await getCurrentUser();
         }
       }

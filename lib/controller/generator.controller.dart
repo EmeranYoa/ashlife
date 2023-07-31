@@ -1,3 +1,4 @@
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:ashlife/Screen/generation_result.dart';
 import 'package:ashlife/controller/auth.controller.dart';
@@ -45,18 +46,12 @@ class GeneratorController extends GetxController {
         if (modelStatusResponse['model_training_status'] == "model_ready" ||
             modelStatusResponse['messege'] == "training id not found") {
           User u = authController.user.value;
-          final user = (await Amplify.DataStore.query(
-            User.classType,
-            where: User.PHONE.eq(u.phone),
-          ))
-              .first;
 
           String promp = '';
 
           if (modelStatusResponse['model_training_status'] == "model_ready") {
-            UserModel model = user!.models!
-                .where((element) => element.modelId == modelId)
-                .first;
+            UserModel model =
+                u.models!.where((element) => element.modelId == modelId).first;
 
             promp = "${model.name} ${filter['prompt']}";
           } else {
@@ -249,7 +244,7 @@ class GeneratorController extends GetxController {
           }
 
           await createGeneration(
-              filter: filter, generationResult: response, user: user);
+              filter: filter, generationResult: response, user: u);
           isGenerating.value = false;
           Get.back();
           Get.to(GenerationResult(images: response['output']),
@@ -300,18 +295,18 @@ class GeneratorController extends GetxController {
   Future<void> updateGenerationData() async {
     try {
       isGenerating.value = true;
-      final oldGeneration = (await Amplify.DataStore.query(Generation.classType,
-              where: Generation.PROVIDERID.eq(generationId.value)))
-          .first;
-
+      var request = ModelQueries.get(Generation.classType, generationId.value);
+      final result = await Amplify.API.query(request: request).response;
+      final oldGeneration = result.data!;
       List<Img.Image> generatedImageList = [];
       for (var image in images) {
         generatedImageList.add(Img.Image(path: image.path));
       }
 
       final newGeneration = oldGeneration.copyWith(images: generatedImageList);
+      request = ModelMutations.update(newGeneration);
 
-      await Amplify.DataStore.save(newGeneration);
+      await Amplify.API.mutate(request: request);
       _subscriptionService.updateSubscription(ACTION_TYPE.GENERATION);
       Get.find<NavigationController>().changePage(0);
       Get.find<HomeController>().changeFilter(id: newGeneration.filter.id);
@@ -332,12 +327,10 @@ class GeneratorController extends GetxController {
       {required Map<String, dynamic> filter,
       required Map<String, dynamic> generationResult,
       required User user}) async {
-    Filter filt = (await Amplify.DataStore.query(
-      Filter.classType,
-      where: Filter.ID.eq(filter['id']),
-    ))
-        .first;
+    var request = ModelQueries.get(Filter.classType, filter['id']);
 
+    final result = await Amplify.API.query(request: request).response;
+    Filter filt = result.data!;
     final generation = Generation(
         user: user,
         filter: filt,
@@ -345,7 +338,9 @@ class GeneratorController extends GetxController {
         data: generationResult.toString(),
         providerId: generationResult['id'].toString());
 
-    Amplify.DataStore.save(generation);
+    request = ModelMutations.update(filt);
+
+    await Amplify.API.mutate(request: request);
     generationId.value = generationResult['id'].toString();
   }
 }

@@ -46,13 +46,10 @@ class _LoginState extends State<Login> {
           username: phoneNumberController.text,
           password: passwordController.text);
 
-      await Amplify.DataStore.start();
-
       setState(() {
         isLoading = false;
       });
       Get.offAllNamed('/main');
-      await Amplify.DataStore.start();
     } on AuthException catch (e) {
       setState(() {
         isLoading = false;

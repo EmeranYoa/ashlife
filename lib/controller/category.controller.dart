@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:ashlife/controller/home.controller.dart';
 import 'package:ashlife/models/Image.dart';
@@ -24,72 +25,81 @@ class CategoryController extends GetxController {
   }
 
   Future<void> inittialData() async {
-    await Amplify.DataStore.save(Filter(
+    var request = ModelMutations.create(Filter(
         name: "cyborg",
         prompt:
             "photo of boss as instaport style, headshot portrait of  man 30 years old small beard transparant frame glasses  wavy hair action, expressive face, sharp eyes, by greg rutkowski and norman rockwell, beautiful, technical, futuristic military, trending on artstation, highly detailed, award winning ((ultra realistic eyes)) ((detailed face)), DSLR photography, sharp focus, Unreal Engine 5, Octane Render, Redshift, ((cinematic lighting)), f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, symmetrical face, symmetrical body, symmetric hands",
         negativePrompt: "",
         image: Image(path: 'filters/filter2.png')));
-    await Amplify.DataStore.save(Filter(
+    await Amplify.API.mutate(request: request).response;
+
+    request = ModelMutations.create(Filter(
         name: "anime",
         prompt:
             "photo of boss as instaport style, headshot portrait of  man 30 years old small beard transparant frame glasses  wavy hair action, expressive face, sharp eyes, by greg rutkowski and norman rockwell, beautiful, technical, futuristic military, trending on artstation, highly detailed, award winning ((ultra realistic eyes)) ((detailed face)), DSLR photography, sharp focus, Unreal Engine 5, Octane Render, Redshift, ((cinematic lighting)), f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, symmetrical face, symmetrical body, symmetric hands",
         negativePrompt: "",
         image: Image(path: 'filters/filter2.png')));
+    await Amplify.API.mutate(request: request);
   }
 
   Future<void> getFilters() async {
     try {
       filterLoading.value = true;
-      final f = await Amplify.DataStore.query(Filter.classType);
+      var request = ModelQueries.list(Filter.classType);
+
+      final f = await Amplify.API.query(request: request).response;
+
       List<Map<String, dynamic>> filterWithImage = [];
-      print("==*" * 25);
-      print(f);
+
       List<String> cachedImageFilterUrls =
           await cache.getCachedImageFilterUrls();
       bool newUrlCached = false;
 
-      for (Filter filter in f) {
-        Map<dynamic, dynamic> keyUrl = cachedImageFilterUrls
-            .map((url) => jsonDecode(url))
-            .firstWhere((map) => map.containsValue(filter.image.path),
-                orElse: () => {});
+      final filterListWithoutImage = f.data?.items;
 
-        if (keyUrl.isNotEmpty) {
-          File? file = await cache.getImageFile(keyUrl['url']);
-          if (file != null) {
-            filterWithImage.add({
-              'id': filter.id,
-              "name": filter.name,
-              'model': filter.model,
-              'prompt': filter.prompt,
-              'negativePrompt': filter.negativePrompt,
-              "file": file
-            });
-          }
-        } else {
-          String? imgUrl = await _awsS3.getFileUrl(key: filter.image.path);
+      if (filterListWithoutImage != null) {
+        for (Filter? filter in filterListWithoutImage) {
+          Map<dynamic, dynamic> keyUrl = cachedImageFilterUrls
+              .map((url) => jsonDecode(url))
+              .firstWhere((map) => map.containsValue(filter?.image.path),
+                  orElse: () => {});
 
-          if (imgUrl != null) {
-            newUrlCached = true;
-            cache.preloadImage(imgUrl);
-
-            File? file = await cache.getImageFile(imgUrl);
+          if (keyUrl.isNotEmpty) {
+            File? file = await cache.getImageFile(keyUrl['url']);
             if (file != null) {
-              Map<String, dynamic> img = {
-                "key": filter.image.path,
-                "url": imgUrl
-              };
               filterWithImage.add({
-                'id': filter.id,
-                "name": filter.name,
-                'model': filter.model,
-                'prompt': filter.prompt,
-                'negativePrompt': filter.negativePrompt,
+                'id': filter?.id,
+                "name": filter?.name,
+                'model': filter?.model,
+                'prompt': filter?.prompt,
+                'negativePrompt': filter?.negativePrompt,
                 "file": file
               });
+            }
+          } else {
+            String? imgUrl = await _awsS3.getFileUrl(key: filter?.image.path);
 
-              cachedImageFilterUrls.add(jsonEncode(img));
+            if (imgUrl != null) {
+              newUrlCached = true;
+              cache.preloadImage(imgUrl);
+
+              File? file = await cache.getImageFile(imgUrl);
+              if (file != null) {
+                Map<String, dynamic> img = {
+                  "key": filter?.image.path,
+                  "url": imgUrl
+                };
+                filterWithImage.add({
+                  'id': filter?.id,
+                  "name": filter?.name,
+                  'model': filter?.model,
+                  'prompt': filter?.prompt,
+                  'negativePrompt': filter?.negativePrompt,
+                  "file": file
+                });
+
+                cachedImageFilterUrls.add(jsonEncode(img));
+              }
             }
           }
         }

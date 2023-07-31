@@ -43,15 +43,37 @@ class HttpService {
   }
 
   Future<dynamic> get(String path, [String? id]) async {
+
+   final uri = "$baseUrl$path/${id!}";
+
+     print(uri);
+
     try {
-      final response = await http.get(Uri.parse("$baseUrl$path/$id"),
-          headers: header);
+      final response =
+          await http.get(Uri.parse("$baseUrl$path/$id"), headers: header);
 
       return jsonDecode(response.body);
     } catch (e) {
       return jsonDecode(
           {'status': 'error', 'message': e.toString()}.toString());
     }
+    
+/*     var headers = {
+      'Authorization': 'Bearer 51632624-42a8-46c8-8f81-84af4d904e28'
+    };
+    var request = http.Request(
+        'GET',
+        Uri.parse(uri));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    } */
   }
 
   Future<bool> postFile(String path, File file,

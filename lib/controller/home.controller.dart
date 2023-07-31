@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:ashlife/models/Filter.dart';
 import 'package:ashlife/models/Generation.dart';
@@ -25,13 +26,15 @@ class HomeController extends GetxController {
   Future<void> _getGeneratedImage() async {
     try {
       isLoading.value = true;
-      final generations = (await Amplify.DataStore.query(Generation.classType,
-          where: Generation.FILTER.eq(filterId.value)));
+      var request = ModelQueries.list(Generation.classType);
+      final result = await Amplify.API.query(request: request).response;
+      final generations = result.data?.items;
+      //where: Generation.FILTER.eq(filterId.value));
 
       List<dynamic> filterGenerations = [];
 
-      for (var element in generations) {
-        final img = element.images;
+      for (var element in generations!) {
+        final img = element?.images;
 
         if (img != null) {
           for (var el in img) {

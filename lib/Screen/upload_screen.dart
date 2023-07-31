@@ -1,4 +1,3 @@
-import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:ashlife/Screen/Auth/register.dart';
 import 'package:ashlife/Screen/model_screen.dart';
 import 'package:ashlife/Screen/subscription_screen.dart';
@@ -23,17 +22,19 @@ class UploadScreen extends StatefulWidget {
 
 class _UploadScreenState extends State<UploadScreen> {
   UploadController controller = Get.put(UploadController());
-  ModelController _modelController = Get.put(ModelController());
+  late ModelController _modelController;
 
   @override
   void initState() {
     controller.getInitialData();
+    _modelController = Get.put(ModelController());
     super.initState();
   }
 
   @override
   void dispose() {
     controller.dispose();
+    _modelController.dispose();
     super.dispose();
   }
 
@@ -233,17 +234,17 @@ class _UploadScreenState extends State<UploadScreen> {
                   text: "txt_create_m".tr, //'txt_create_m'.tr,
                   textColor: Colors.white,
                   color: const Color(0xff253890),
-                  pressed: () {
-                    _modelController.createModel;
-                  },
+                  pressed: _modelController.createModel,
                   isLoading: false);
             }
             return CustomButton(
-                text: 'txt_choose_p'.tr,
+                text: 'txt_create_m'.tr,
                 textColor: Colors.white,
                 color: const Color(0xff253890),
-                pressed: () {
-                  onCreateModelPress();
+                pressed: _modelController.createModel,
+/*                 pressed: () {
+                  
+                  _modelController.createModel();
                   // if (controller.images.length >= 20) {
                   //   Get.snackbar('Error',
                   //       "You have reached the maximum number of maximum files to upload");
@@ -251,7 +252,7 @@ class _UploadScreenState extends State<UploadScreen> {
                   // }
                   // Get.bottomSheet(
                   //     BottomSheet(size: size, controller: controller));
-                },
+                }, */
                 isLoading: false);
           }),
         ),
