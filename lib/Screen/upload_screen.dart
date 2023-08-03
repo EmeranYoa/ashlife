@@ -24,6 +24,9 @@ class _UploadScreenState extends State<UploadScreen> {
   UploadController controller = Get.put(UploadController());
   late ModelController _modelController;
 
+  final prompt = "woman with cornrows";
+  final modelId = "48c07a22-fa65-4143-a7af-f2ea85a0ecaa";
+
   @override
   void initState() {
     controller.getInitialData();
@@ -236,14 +239,14 @@ class _UploadScreenState extends State<UploadScreen> {
                   color: const Color(0xff253890),
                   pressed: _modelController.createModel,
                   isLoading: false);
-            }
+            }          
             return CustomButton(
                 text: 'txt_create_m'.tr,
                 textColor: Colors.white,
                 color: const Color(0xff253890),
                 pressed: _modelController.createModel,
 /*                 pressed: () {
-                  
+
                   _modelController.createModel();
                   // if (controller.images.length >= 20) {
                   //   Get.snackbar('Error',
@@ -414,7 +417,7 @@ class _CreateModelBottomSheetState extends State<CreateModelBottomSheet> {
           return Column(
             children: [
               const Text(
-                'Veuillez completer les informations suivant pour demarrer le generation de votre model',
+                'Veuillez completer les informations suivant pour demarrer la generation de votre model',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),

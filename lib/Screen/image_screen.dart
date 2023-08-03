@@ -7,120 +7,72 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class ImageScreen extends StatefulWidget {
-  const ImageScreen({Key? key}) : super(key: key);
+class ImageGenerated extends StatefulWidget {
+  const ImageGenerated({Key? key}) : super(key: key);
 
   @override
-  State<ImageScreen> createState() => _ImageScreenState();
+  State<ImageGenerated> createState() => _ImageGeneratedState();
 }
 
-class _ImageScreenState extends State<ImageScreen> {
-  UploadController controller = Get.put(UploadController());
+class _ImageGeneratedState extends State<ImageGenerated> {
   late ModelController _modelController;
+  final modelId = "48c07a22-fa65-4143-a7af-f2ea85a0ecaa";
+  final prompt = "woman with cornrows";
 
   @override
   void initState() {
-    controller.getInitialData();
-    _modelController = Get.put(ModelController());
     super.initState();
+    _modelController = Get.put(ModelController());
+    
   }
 
   @override
   void dispose() {
-    controller.dispose();
     _modelController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Obx(() {
-          return const SizedBox(
-            height: 30,
-          );
-        }),
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
-          child: Text(
-            'txt_my_pictures'.tr,
-            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
-          ),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Your Images'),
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        Expanded(
-          child: Obx(() {
-            List images = controller.images;
-            bool loading = controller.loading.value;
-            return loading
-                ? const Center(
-                    child: CircularProgressIndicator(
-                      color: Color(0xff253890),
+        body: Expanded(child: Obx(() {
+          List <String> images = [];
+          bool loading = _modelController.loading.value;
+          //var selectedImages = _modelController.selectedImages.value;
+          return loading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xff253890),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: GridView.builder(  
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 1,
+                      crossAxisSpacing: 15,
+                      mainAxisSpacing: 15,
                     ),
+                    itemCount: images.length,
+                    itemBuilder: (_, index) {
+                      String imageUrl = images[index]; // Replace with your list of image URLs
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: NetworkImage(imageUrl),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    },
                   )
-                : Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200,
-                                childAspectRatio: 1,
-                                crossAxisSpacing: 15,
-                                mainAxisSpacing: 15),
-                        itemCount: images.length,
-                        itemBuilder: (_, index) {
-                          return Material(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(10),
-                            child: InkWell(
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                          image:
-                                              FileImage(images[index]["file"]),
-                                          fit: BoxFit.cover,
-                                          colorFilter: images[index]
-                                                  ["isSelected"]
-                                              ? const ColorFilter.mode(
-                                                  Color(0xff253890),
-                                                  BlendMode.color)
-                                              : const ColorFilter.mode(
-                                                  Colors.white,
-                                                  BlendMode.darken)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }),
-                  );
-          }),
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 30, right: 30, bottom: 15),
-          child: Obx(() {
-              return CustomButton(
-                  text: "txt_create_m".tr, //'txt_create_m'.tr,
-                  textColor: Colors.white,
-                  color: const Color(0xff253890),
-                  pressed: _modelController.createModel,
-                  isLoading: false);
-          }),
-        ),
-      ],
-    );
+
+                );
+        })));
   }
 }

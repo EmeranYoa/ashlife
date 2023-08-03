@@ -3,6 +3,7 @@ import 'package:ashlife/Screen/Auth/login.dart';
 import 'package:ashlife/Screen/Auth/new_password.dart';
 import 'package:ashlife/Screen/Auth/phoneverif.dart';
 import 'package:ashlife/Screen/Auth/register.dart';
+import 'package:ashlife/Screen/image_screen.dart';
 import 'package:ashlife/Screen/splash_screen.dart';
 import 'package:ashlife/navigation/bottom_navigation.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,8 @@ class CustomRouter{
         return GetPageRoute(routeName: '/register', page: () => const Register(),transition: Transition.rightToLeft, transitionDuration: const Duration(seconds: 1));
       case '/forgot':
         return GetPageRoute(routeName: '/forgot', page: () => const ForgotPassword(),transition: Transition.rightToLeft, transitionDuration: const Duration(seconds: 1));
-      case '/imageGenerated':
-        return GetPageRoute(routeName: '/imageGenerated', page: () => const ForgotPassword(),transition: Transition.rightToLeft, transitionDuration: const Duration(seconds: 1));
+      case '/ImageGenerated':
+        return GetPageRoute(routeName: '/ImageGenerated', page: () => const ImageGenerated(),transition: Transition.rightToLeft, transitionDuration: const Duration(seconds: 1));
       case '/main':
         return GetPageRoute(routeName: '/main', page: () => const BottomNavigation(),transition: Transition.fade, transitionDuration: const Duration(seconds: 1));
       default:

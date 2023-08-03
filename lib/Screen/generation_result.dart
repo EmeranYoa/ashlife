@@ -53,7 +53,16 @@ class _GenerationResultState extends State<GenerationResult> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xff253890),
-          title: const Text('Generation'),
+          title: const Text('Generated images'),
+          actions: [
+            IconButton(
+              onPressed: () {
+                terminateGenerationProcess();
+              },
+              icon: const Icon(Icons.save),
+              color: Colors.white,
+            )
+          ],
           centerTitle: true,
         ),
         body: SafeArea(

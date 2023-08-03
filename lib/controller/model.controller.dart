@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:ashlife/Screen/generation_result.dart';
 import 'package:ashlife/models/ModelProvider.dart';
 import 'package:ashlife/services/auth.service.dart';
 import 'package:ashlife/services/aws.s3.service.dart';
 import 'package:ashlife/services/cache.service.dart';
-import 'package:ashlife/screen/image_screen.dart';
 import 'package:ashlife/services/http.service.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -146,7 +146,15 @@ class ModelController extends GetxController {
           final String modelId = response['sdTrainingJob']['customModelId'];
           const String prompt = "woman with cornrows";
 
-          await generateImages(modelId: modelId, prompt: prompt);
+          List<String> imageUrls =
+              await generateImages(modelId: modelId, prompt: prompt);
+          print("==========MOVING TO GENERATION RESULT PAGE===================");
+          Get.to(
+            () => GenerationResult(images: imageUrls),
+            duration: const Duration(seconds: 15),
+            transition: Transition.fade,
+          );
+
           // final user = await _authService.getCurrentUser();
 
           // if (user != null) {
@@ -188,14 +196,9 @@ class ModelController extends GetxController {
     } on Exception catch (e) {
       loading.value = false;
     }
-    Get.to(
-      const ImageScreen(),
-      duration: const Duration(milliseconds: 800),
-      transition: Transition.fade,
-    );
   }
 
-  Future<void> generateImages(
+  Future<List<String>> generateImages(
       {required String modelId,
       required String prompt,
       String negativePrompt = "",
@@ -208,7 +211,8 @@ class ModelController extends GetxController {
       "num_images": numImages,
       "negative_prompt": negativePrompt
     });
-
+    var items = <ResponseImageItem>[];
+    List<String> imageUrls = [];
     print("end");
     print(response);
 
@@ -220,7 +224,7 @@ class ModelController extends GetxController {
       final result = await Amplify.API.query(request: request).response;
       final u = result.data?.items.first as User;
 
-      await Future.delayed(const Duration(seconds: 12), () async {
+      await Future.delayed(const Duration(seconds: 15), () async {
         final String generationId = response['sdGenerationJob']['generationId'];
 
         final imageGenerated =
@@ -228,38 +232,21 @@ class ModelController extends GetxController {
 
         print("============Response to image generation================");
         print(imageGenerated);
+
         final urls = imageGenerated['generations_by_pk']['generated_images'];
-
-        var items = <ResponseImageItem>[];
-
         for (var element in urls) {
           ResponseImageItem item = ResponseImageItem(
               url: element["url"],
               id: element["id"],
               likeCount: element["likeCount"]);
-
           items.add(item);
         }
-        print(items);
+        for (int i = 0; i < numImages; i++) {
+          imageUrls.add(items[i].url);
+          print(items[i].url);
+        }
       });
-
-      Workmanager().registerPeriodicTask(
-        'checkModelGenerated',
-        "checkModelGenerated",
-        frequency: const Duration(minutes: 1),
-        initialDelay: const Duration(seconds: 10),
-        inputData: {'id': response['modelId'], "userId": u.id},
-        constraints: Constraints(networkType: NetworkType.connected),
-      );
-      Workmanager().registerPeriodicTask(
-        'checkImagesGenerated',
-        "checkImagesGenerated",
-        frequency: const Duration(minutes: 1),
-        initialDelay: const Duration(minutes: 1),
-        inputData: {'id': response['generationId'], "userId": u.name},
-        // inputData: {'id': response['training_id'], "userId": '+237691489490'},
-        constraints: Constraints(networkType: NetworkType.connected),
-      );
     }
+    return imageUrls;
   }
 }

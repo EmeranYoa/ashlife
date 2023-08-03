@@ -318,7 +318,7 @@ class GeneratorController extends GetxController {
     } on AmplifyException catch (e) {
       generationId.value = "";
       Get.snackbar('Error',
-          "Désoler nous n'avons pas reuissir a sauvegarder vos images, verifier votre connexion internet et réessayer");
+          "Désoler nous n'avons pas reuissi a sauvegarder vos images, verifier votre connexion internet et réessayer");
       isGenerating.value = false;
     }
   }
